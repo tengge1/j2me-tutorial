@@ -1,0 +1,119 @@
+/*这节我们学习平滑地移动画布上物体的方法，并学习多线程接口Runnable的使用。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+
+public class Midlet extends MIDlet
+{
+    Display display;
+    Canvas canvas;
+    
+    public Midlet()
+    {
+        display=Display.getDisplay(this);
+        canvas=new MoveCanvas();
+        }
+    
+    public void startApp(){
+        display.setCurrent(canvas);
+        canvas.setFullScreenMode(true);
+        }
+    
+    public void pauseApp(){}
+    
+    public void destroyApp(boolean unconditional){}
+}
+
+//使用多线程接口Runnable
+public class MoveCanvas extends Canvas implements Runnable
+{
+    int key;
+    Image girl;
+    Thread thread;//声明线程实例
+    int X,Y;//图像的X，Y坐标
+    int width,height;//图片的宽度，高度
+    
+    public MoveCanvas()
+    {
+        key=0;
+        X=100;
+        Y=120;
+        try
+        {
+            girl=Image.createImage("/girl.png");
+            }
+        catch(Exception e) {}
+        
+        //获取图片宽度高度
+        width=girl.getWidth();
+        height=girl.getHeight();
+        
+        //生成线程实例
+        thread=new Thread(this);
+        
+        //该句会启动void run()方法的运行
+        thread.start();
+        }
+    
+    //使用Runnable接口必须重写该方法
+    public void run()
+    {
+        while(true)
+        {
+            switch(key)
+            {
+                //上键
+                case UP:Y-=3;break;
+                //下键
+                case DOWN:Y+=3;break;
+                //左键
+                case LEFT:X-=3;break;
+                //右键
+                case RIGHT:X+=3;break;
+                default:
+                }
+            
+            //限制图片不移出屏幕范围
+            if(X<0) X=0;
+            if(X>getWidth()-width) X=getWidth()-width;
+            if(Y<0) Y=0;
+            if(Y>getHeight()-height) Y=getHeight()-height;
+            
+            //注意调用此方法会使画布重画！
+            repaint();
+            
+            try
+            {
+                //让线程暂停10秒钟，否则移动太快
+                thread.sleep(10);
+                }
+            catch(Exception e) {}
+            }
+        }
+    
+    protected void paint(Graphics g){
+        g.setColor(0,36,100);        
+        g.fillRect(0,0,getWidth(),getHeight());
+        g.drawImage(girl,X,Y,Graphics.TOP|Graphics.LEFT);
+        }
+    
+    protected void keyPressed(int keycode)
+    {
+        //键按下时赋值给key游戏键值
+        key=getGameAction(keycode);        
+        }
+    
+    protected void keyReleased(int keycode)
+    {
+        //键松开时赋值给key 0
+        key=0;
+        }
+    
+    protected void keyRepeated(int keycode)
+    {
+        }
+     
+    }
+
+/*我们仅在按键方法和释放键方法中改变变量key的值，而不是改变X,Y的值，这是因为如果在按键方法和释放键方法改变X，Y的值并调用repaint重画界面，在长按键的过程中，这些方法仅执行一次。要想让物体连续移动，必须不断按键！！！当然如果你做菜单，应该使用后一种方法。
+tengge QQ:930372551*/

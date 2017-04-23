@@ -1,0 +1,76 @@
+/*这节我们图片的裁剪。图片的裁剪区域是指画布上需要重画的位置。例如，画布上裁剪区域为(0,0,30,50)，而图片大小(0,0,80,100)，图片左上角放在(0,0)，那么仅有落在裁剪区域部分能画到画布上。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+
+public class Midlet extends MIDlet
+{
+    Display display;
+    Canvas canvas;
+    
+    public Midlet()
+    {
+        display=Display.getDisplay(this);
+        canvas=new MoveCanvas();
+        }
+    
+    public void startApp(){
+        display.setCurrent(canvas);
+        canvas.setFullScreenMode(true);
+        }
+    
+    public void pauseApp(){}
+    
+    public void destroyApp(boolean unconditional){}
+}
+
+public class MoveCanvas extends Canvas
+{
+    Image girl;
+    int width,height;//图片宽高
+    
+    public MoveCanvas()
+    {
+        try
+        {
+            girl=Image.createImage("/girl.png");
+            }
+        catch(Exception e) {}
+        
+        width=girl.getWidth();
+        height=girl.getHeight();        
+        }    
+    
+    protected void paint(Graphics g){
+        g.setColor(0,36,100);        
+        g.fillRect(0,0,getWidth(),getHeight());
+        g.drawImage(girl,0,0,Graphics.TOP|Graphics.LEFT);
+        
+        //只画上半部分（裁剪区是指屏幕上需要画的区域的位置坐标）
+        g.setClip(130,0,width,height/2);
+        g.drawImage(girl,130,0,Graphics.TOP|Graphics.LEFT);
+        //只画下半部分
+        g.setClip(0,150+height/2,width,height/2);
+        g.drawImage(girl,0,150,Graphics.TOP|Graphics.LEFT);
+        //只画左半部分
+        g.setClip(150,130,width/2,height);
+        g.drawImage(girl,150,150,Graphics.TOP|Graphics.LEFT);
+        //恢复原来裁剪区域
+        g.setClip(0,0,getWidth(),getHeight());
+        }
+    
+    protected void keyPressed(int keycode)
+    {   
+        }
+    
+    protected void keyReleased(int keycode)
+    {
+        }
+    
+    protected void keyRepeated(int keycode)
+    {
+        }     
+    }
+
+/*
+tengge QQ:930372551*/

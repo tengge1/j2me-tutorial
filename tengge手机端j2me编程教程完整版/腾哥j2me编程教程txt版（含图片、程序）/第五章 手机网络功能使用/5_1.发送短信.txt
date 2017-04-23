@@ -1,0 +1,64 @@
+/*这节我们学习如何用j2me进行发短信操作。没注释的地方都是以前讲过的，而且跟发短信没什么关系，就不加注释了，望谅解。该程序向10086发送1，不会form界面的看第二章。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import javax.microedition.io.Connector;//连接类，发短信、联网都需要引入该类
+import javax.wireless.messaging.*;
+//主要使用该包中的TextMessage和MessageConnection类
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Form form;
+    Display display;
+    Command send,exit;
+    
+    public Midlet()
+    {
+        form=new Form("发送短信");
+        display=Display.getDisplay(this);
+        send=new Command("发送",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        form.append("左软键发短信");
+        form.addCommand(send);
+        form.addCommand(exit);
+        }
+    
+    public void startApp()
+    {
+        display.setCurrent(form);
+        form.setCommandListener(this);
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean arg0) {}
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==send) send();
+        else if(c==exit) notifyDestroyed();
+        }
+    
+    //有关发短信的东西全在这个方法里，请认真看！
+    public void send()
+    {
+        //用try避免因用户手机离线引发异常导致程序错误
+        try
+        {
+            //打开一个连接，并强制转换为短信连接，最后一个括号里写"sms://"+收信人号码，经常破解游戏的应该很熟悉
+            MessageConnection messageconnection=(MessageConnection)Connector.open("sms://10086");
+            //新建一个文本类型短信，强制转换为TextMessage类型
+            TextMessage textmessage = (TextMessage)messageconnection.newMessage("text");
+            //设置短信内容为“1”，这里无论写英语还是汉字，都可以正确发送！
+            textmessage.setPayloadText("1");
+            //将这条短信发出去，发送时我手机上没发短信图标，不知大家怎么样？
+            messageconnection.send(textmessage);
+            //关闭短信连接
+            messageconnection.close();
+            }
+        catch(Exception e) {}
+        }
+    }
+
+/*发短信很简单，不解释了。
+tengge QQ:930372551*/

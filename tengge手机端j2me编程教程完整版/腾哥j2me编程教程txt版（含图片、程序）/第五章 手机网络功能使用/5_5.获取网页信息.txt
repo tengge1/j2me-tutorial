@@ -1,0 +1,70 @@
+/*本程序获取百度首页相关信息，使用HttpConnection。另外，上节StreamConnection能用的方法HttpConnection都能用。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import javax.microedition.io.*;
+//上面包中提供Connector类、HttpConnection类。
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Form form;
+    Display display;
+    Command send,exit;
+    
+    public Midlet()
+    {
+        form=new Form("获取信息");
+        display=Display.getDisplay(this);
+        send=new Command("获取",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        form.append("按左键获取百度首页信息！");
+        form.addCommand(send);
+        form.addCommand(exit);
+        }
+    
+    public void startApp()
+    {
+        display.setCurrent(form);
+        form.setCommandListener(this);
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean arg0) {}
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==send) send();
+        else if(c==exit) notifyDestroyed();
+        }
+    
+    //有关联网取得网页源码的东西全在这个方法里，请认真看！
+    public void send()
+    {
+        //用try避免因无法取得网页引发异常导致程序错误
+        try
+        {
+            //首先打开一个网络连接，并强制转化为HttpConnection类型
+            HttpConnection connection=(HttpConnection)Connector.open("http://wap.baidu.com");
+            form.delete(0);
+            
+            //获取相关信息
+            form.append("URL:"+connection.getURL());
+            form.append("\nProtocol:"+connection.getProtocol());
+            form.append("\nHost:"+connection.getHost());
+            form.append("\nFile:"+connection.getFile());
+            form.append("\nRef:"+connection.getRef());
+            form.append("\nQuery:"+connection.getQuery());
+            form.append("\nPort:"+connection.getPort());
+            form.append("\nRequestMethod:"+connection.getRequestMethod());
+            form.append("\nResponseCode:"+connection.getResponseCode());
+            form.append("\nResponseMessage:"+connection.getResponseMessage());
+            form.append("\nDate:"+connection.getDate());
+            }
+        catch(Exception e)
+        {
+            }
+        }
+    }
+
+/*tengge QQ:930372551*/

@@ -1,0 +1,79 @@
+/*这节我们相对坐标系的使用。有时候，我们把坐标原点从画布左上角移到另一点画图会比较方便。看程序：*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+
+public class Midlet extends MIDlet
+{
+    Display display;
+    Canvas canvas;
+    
+    public Midlet()
+    {
+        display=Display.getDisplay(this);
+        canvas=new MoveCanvas();
+        }
+    
+    public void startApp(){
+        display.setCurrent(canvas);
+        canvas.setFullScreenMode(true);
+        }
+    
+    public void pauseApp(){}
+    
+    public void destroyApp(boolean unconditional){}
+}
+
+public class MoveCanvas extends Canvas
+{
+    Image tree;
+    
+    public MoveCanvas()
+    {
+        try
+        {
+            tree=Image.createImage("/tree.png");
+            }
+        catch(Exception e) {}
+        }
+    
+    protected void paint(Graphics g){
+        g.setColor(0,36,100);        
+        g.fillRect(0,0,getWidth(),getHeight());
+        
+        //这是以原点在屏幕左上角画图
+        g.drawImage(tree,0,0,Graphics.TOP|Graphics.LEFT);
+        
+        //将坐标原点右移80，下移100
+        g.translate(80,100);
+        
+        //这是以原点在（80,100）画图，此时绝对坐标为（80,100）
+        g.drawImage(tree,0,0,Graphics.TOP|Graphics.LEFT);
+        
+        //将坐标原点左移80，下移0
+        g.translate(-80,0);
+        
+        //这是以原点在（0,100）画图，此时绝对坐标为（10,100）
+        g.drawImage(tree,10,0,Graphics.TOP|Graphics.LEFT);
+        
+        //将坐标原点放回原处
+        g.translate(-g.getTranslateX(),-g.getTranslateY());
+        
+        //Graphics.getTranslateX()获得当前坐标原点的X位置
+        }
+    
+    protected void keyPressed(int keycode)
+    {   
+        }
+    
+    protected void keyReleased(int keycode)
+    {
+        }
+    
+    protected void keyRepeated(int keycode)
+    {
+        }     
+    }
+
+/*
+tengge QQ:930372551*/

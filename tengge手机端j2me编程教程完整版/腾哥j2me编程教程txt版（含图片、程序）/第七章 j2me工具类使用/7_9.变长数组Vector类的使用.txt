@@ -1,0 +1,82 @@
+Vector是变长数组类，Vector可以根据元素数量随时调整长度，其实就相当于python中的列表。
+
+import java.util.Vector;
+
+vector=new Vector();
+//创建一个变长数组
+
+vector=new Vector(5);
+//创建一个变长数组，并设置初始长度为5
+
+//元素可以是任何对象，这里用object示例用法
+Object object=new Object();
+
+//向变长数组中添加object对象，并使长度加 1
+vector.addElement(object);
+
+//返回当前容量
+int large=vector.capacity();
+
+//判断元素是否在变长数组里
+boolean has=vector.contains(object);
+
+Object []objects=new Object[10000];
+//将vector中所有元素复制到数组中
+vector.copyInto(objects);
+
+//返回第一个位置元素
+object=vector.elementAt(0);
+
+//返回由元素组成的枚举体
+Enumeration enum=vector.elements();
+
+//设置最小容量
+vector.ensureCapacity(5);
+
+//返回第一个元素
+object=vector.firstElement();
+
+//返回object元素第一个位置
+int pos=vector.indexOf(object);
+
+//从第三个元素开始，返回第一个object元素位置
+int pos=vector.indexOf(object,3);
+
+//在第一个元素后插入一个元素
+vector.insertElementAt(object,1);
+
+//判断是否为空
+boolean empty=isEmpty();
+
+//返回最后一个元素
+object=vector.lastElement();
+
+//从后面数，返回object元素第一个位置
+int pos=vector.lastIndexOf(object);
+
+//从第三个元素开始，返回倒数第一个object元素位置
+int pos=vector.lastIndexOf(object,3);
+
+//删除所有元素，设置大小为0
+vector.removeAllElements();
+
+//删除第一次出现的object元素
+vector.removeElement(object);
+
+//删除第5个元素
+vector.removeElementAt(5);
+
+//重新设置第五个位置元素
+vector.setElementAt(object,5);
+
+//设置大小为5
+vector.setSize(5);
+
+//返回vector中元素数
+int size=vector.size();
+
+//改成容量为当前元素数量
+vector.trimToSize();
+
+作者：tengge
+QQ:930372551

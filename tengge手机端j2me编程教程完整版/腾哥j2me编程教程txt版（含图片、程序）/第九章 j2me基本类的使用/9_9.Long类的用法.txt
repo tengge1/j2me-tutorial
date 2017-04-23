@@ -1,0 +1,13 @@
+Long是长整数。
+
+Long l=new Long(123456);
+//long转Long
+
+long l1=l.longValue();
+//Long转long
+
+long l2=Long.parseLong("123456789");
+//字符串转long
+
+String s=l.toString();
+//Long转String

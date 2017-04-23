@@ -1,0 +1,53 @@
+/*这节我们学习如何用j2me进行打电话操作。没注释的地方都是以前讲过的，而且跟打电话没什么关系，就不加注释了，望谅解。该程序借助platformRequest给10086拨号。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Form form;
+    Display display;
+    Command send,exit;
+    
+    public Midlet()
+    {
+        form=new Form("打电话");
+        display=Display.getDisplay(this);
+        send=new Command("拨打",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        form.append("左软键打电话");
+        form.addCommand(send);
+        form.addCommand(exit);
+        }
+    
+    public void startApp()
+    {
+        display.setCurrent(form);
+        form.setCommandListener(this);
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean arg0) {}
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==send) send();
+        else if(c==exit) notifyDestroyed();
+        }
+    
+    //有关打电话的东西全在这个方法里，请认真看！
+    public void send()
+    {
+        //用try避免因用户手机离线引发异常导致程序错误
+        try
+        {
+            //调用系统功能实现打电话，括号内为“tel:”+电话号码，该方法在MIDlet类中定义
+            platformRequest("tel:10086");
+            }
+        catch(Exception e) {}
+        }
+    }
+
+/*打电话很简单，不解释了。
+tengge QQ:930372551*/

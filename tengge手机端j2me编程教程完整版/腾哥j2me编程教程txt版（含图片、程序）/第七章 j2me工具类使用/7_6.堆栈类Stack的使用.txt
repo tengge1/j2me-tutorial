@@ -1,0 +1,27 @@
+Stack类是java堆栈类，堆栈是一端封口，只能从一端存取对象，“先进后出”的一个线性表。它的使用很简单：
+
+//先产生两个Object实例，任何类的实例都行，包括整数、字符串等。
+Object object1=new Object();
+Object object2=new Object();
+
+//产生堆栈实例
+Stack stack=new Stack();
+
+//两个对象放入堆栈中
+stack.push(object1);
+stack.push(object2);
+
+//弹出后推入的一个对象object2，如果不是Object类型，注意强制类型转换，现在堆栈中仅有一个元素
+Object object=stack.pop();
+
+//查看栈顶元素，不弹出
+object=stack.peek();
+
+//判断是否为空
+boolean isEmpty=stack.empty();
+
+//搜索某个元素位置
+int pos=stack.search(object1);
+
+作者：tengge
+QQ:930372551

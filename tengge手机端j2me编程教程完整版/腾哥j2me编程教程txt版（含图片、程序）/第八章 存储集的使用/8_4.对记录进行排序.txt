@@ -1,0 +1,29 @@
+RecordComparator接口可以对记录进行排序，你只要指明排序方法即可。
+示例用法：
+import javax.microedition.rms.RecordComparator;
+
+class Comparator implements RecordComparator
+{
+    //必须重写compare方法，根据返回值不同系统判断两个记录的排序方法
+    public int compare(byte[] record1,byte[] record2)
+    {
+        if(record[0]>record[1])
+        return(FOLLOWS);
+        if(record[0]==record[1])
+        return(EQUIVALENT);
+        if(record[0]<record[1])
+        return(PRECEDES);
+        }
+    }
+//该类就可以放在enumerateRecords第二个参数位置进行排序，本类按记录首字节从小到大排序
+//RecordEnumeration enum=recordstore.enumerateRecords(null,new Comparator(),true);
+
+说明：
+int compare(byte[] rec1,byte[] rec2):返回一个整数值。
+注，比较返回值：
+RecordComparator.EQUIVALENT=0 两个记录相同
+RecordComparator.FOLLOWS=1 前一记录在后一记录后面
+RecordComparator.PRECEDES=-1 前一记录在后一记录的前面
+
+作者：tengge
+QQ：930372551

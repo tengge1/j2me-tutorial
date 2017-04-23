@@ -1,0 +1,76 @@
+/*本程序可以播放e:/1.mp3，运行程序前请将1.mp3放到e盘根目录。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import javax.microedition.media.*;
+//使用上述包中的Manager类和Player类
+import java.io.InputStream;
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Form form;
+    Display display;
+    Command play,stop,exit;
+    Player player;
+    
+    public Midlet()
+    {
+        form=new Form("播放音乐");
+        display=Display.getDisplay(this);
+        try
+        {
+            //创建播放器
+            player=Manager.createPlayer("file:///e:/1.mp3");
+            //参数分别是mp3文件路径
+            player.realize();
+            //读取mp3文件
+            player.prefetch();
+            //获取喇叭资源
+            player.setLoopCount(10);
+            //设置重复播放次数为10
+            }
+        catch(Exception e)
+        {
+            display.setCurrent(new Alert("错误：",e.toString(),null,AlertType.ERROR));
+            }
+        play=new Command("播放",Command.OK,2);
+        stop=new Command("停止",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        form.append("播放音乐示范程序，请打开情景模式的警告音！请将1.mp3放到e盘根目录");
+        //player.getContentType();获取播放类型
+        //player.getDuration();获取播放总时间
+        //player.getMediaTime();获取当前播放时间
+        //player.setMediaTime(long time);设置播放时间
+        form.addCommand(play);
+        form.addCommand(stop);
+        form.addCommand(exit);
+        }
+    
+    public void startApp()
+    {
+        display.setCurrent(form);
+        form.setCommandListener(this);
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean arg0) {}
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        try{
+            //播放
+            if(c==play) player.start();
+            //停止
+            if(c==stop) player.stop();
+            //退出
+            if(c==exit) notifyDestroyed();
+            }
+        catch(Exception e)
+        {
+            display.setCurrent(new Alert("错误：",e.toString(),null,AlertType.ERROR));
+            }
+        }
+    }
+
+/*tengge QQ:930372551*/

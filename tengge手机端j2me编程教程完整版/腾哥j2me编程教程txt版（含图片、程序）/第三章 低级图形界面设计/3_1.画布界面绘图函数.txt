@@ -1,0 +1,127 @@
+/*从这一章开始，我们将学习低级图形界面程序的设计。虽然低级图形界面很麻烦，还要考虑各平台特性（例如分辨率）的不同，但自由度很大。图形界面程序设计其实就是画图的过程。
+如果你有语句看不懂，请看前面的教程，没加注释的前面都讲过了。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+
+//这里我们使用CommandListener接口是想向大家证明画布界面也可以使用按钮
+public class Midlet extends MIDlet implements CommandListener
+{
+    Display display;
+    Canvas canvas;//画布类
+    Command exit;
+
+    public Midlet()
+    {
+        display=Display.getDisplay(this);
+        
+        //将继承于Canvas类的TemplateCanvas类实例化
+        canvas=new TemplateCanvas();
+        
+        exit=new Command("退出",Command.EXIT,2);
+        
+        //在画布上添加按钮
+        canvas.addCommand(exit);
+        }
+        
+    protected void startApp()
+    {
+        //将当前界面设为画布界面
+        display.setCurrent(canvas);
+        
+        //监听按键动作
+        canvas.setCommandListener(this);
+        
+        //这句没什么用处，后面的false变为true将成为全屏，为了让大家看到按钮，我们不使用全屏
+        canvas.setFullScreenMode(false);
+            }
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==exit)
+        {
+            notifyDestroyed();
+            }
+        }
+    
+    protected void pauseApp(){}
+    protected void destroyApp(boolean arg0){}
+}
+
+//TemplateCanvas类继承Canvas类
+public class TemplateCanvas extends Canvas
+{
+    Image image;
+    
+    public TemplateCanvas()
+    {
+        try
+        {
+            image=Image.createImage("/1.png");
+            }
+        catch(Exception e){}
+        }
+    
+    //paint方法是一个非常重要的方法，画图命令都要放在里边
+    public void paint(Graphics g)
+    {
+        //改变画笔颜色，括号内分别是红绿蓝取值，最大255，也可以用十六进制表示法。例如：0xffab02
+        g.setColor(0,125,36);
+        
+        //画弧
+        g.drawArc(0,0,20,10,0,270);
+        //参数分别是左上角X坐标、Y坐标、椭圆的外接矩形宽度、高度、开始角度、结束角度（注意不是弧度）
+        
+        //画图片到画布上
+        g.drawImage(image,130,150,Graphics.TOP|Graphics.LEFT);
+        //将图片image的左上角放在画布的（130,150）处（注意坐标原点在屏幕左上角）
+        //最后一个参数可选项有：
+        //Graphics.VCENTER竖直中点
+        //Graphics.HCENTER水平中点
+        //Graphics.BASELINE基线
+        //Graphics.TOP上边
+        //Graphic.BOTTOM下边
+        //Graphics.LEFT左边
+        //Graphics.RIGHT右边
+        //只要不矛盾，可使用多个属性，用“|”连接
+        
+        //画线
+        g.drawLine(30,0,50,10);
+        //从（30,0）画到（50,10）
+        
+        //画矩形
+        g.drawRect(60,0,80,10);
+        //分别是左上角右下角坐标
+        
+        //画圆角矩形
+        g.drawRoundRect(90,0,100,10,10,20);
+        //分别是圆角矩形左上角右下角坐标，圆角所在矩形宽度、圆角所在矩形高度
+        
+        //画填充弧
+        g.fillArc(0,40,20,60,90,270);
+        //参数同前
+        
+        //画填充圆角矩形
+        g.fillRoundRect(50,40,80,60,20,10);
+        //参数同前
+        
+        //画填充矩形
+        g.fillRect(90,40,110,60);
+        //参数同前
+        
+        //画字符串
+        g.drawString("图形演示",50,80,Graphics.BASELINE|Graphics.HCENTER);
+        //最后一个参数同图片最后一个参数
+        }
+    }
+
+/*新东西在程序中都解释了，这里就不解释了。还有很多其他方法，我们将在以后的几节为大家讲解。
+另外，在paint方法中还可以设置笔触：
+g.setStrokeType(Graphics.SOLID);
+//画实线
+g.setStrokeType(Graphics.DOTTED);
+//画虚线
+g.fillTriangle(int x1,int y1,int x2,int y2,int x3,int y3);
+//画填充三角形
+
+tengge QQ:930372551*/

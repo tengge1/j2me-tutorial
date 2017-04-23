@@ -1,0 +1,16 @@
+int radix=Character.MAX_RADIX;//可把字符串转换的最大进制
+int radix=Character.MIN_RADIX;//可把字符串转换的最小进制
+char cv=Character.MAX_VALUE;//Character类可容纳ascii码最大字符
+char cv=Character.MIN_VALUE;//Character类可容纳ascii码最小字符
+Character c=new Character('a');//新建字符类
+char cv=c.charValue();//返回字符
+int value=Character.digit('f',16);//返回'f'在16进制中代表值
+c.equals(new Character('b'));//判断两Character实例是否相等
+int code=c.hashCode();//哈希值
+boolean b=Character.isDigit('a');//判断是否是数字
+boolean b=Character.isLowerCase('c');//判断是否是小写
+boolean b=Character.isUpperCase('M');//判断是否是大写
+char cv=Character.toUpperCase('M');//转为大写
+char cv=Character.toLowerCase('a');//转为小写
+String s=c.toString();//转为字符串
+//QQ930372551

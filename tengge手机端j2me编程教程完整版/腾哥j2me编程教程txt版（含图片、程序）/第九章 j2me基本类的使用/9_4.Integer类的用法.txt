@@ -1,0 +1,28 @@
+Integer类，整数类。
+
+Integer i=new Integer(5);
+//将5变成类
+
+byte b=i.byteValue();
+//整数转byte
+
+double d=i.doubleValue();
+//整数转double
+
+int a=i.intValue();
+//整数类转基本类型
+
+long l=i.longValue();
+//整数类转长整数
+
+int ii=Integer.parseInt("1234");
+//字符串转整数，非常重要！！！
+
+int ii2=Integer.parseInt("ab1234",16);
+//按16进制，字符串转整数
+
+String s=Integer.toHexString(30);
+//30转成16进制字符串，非常重要！
+
+作者：tengge
+QQ:930372551

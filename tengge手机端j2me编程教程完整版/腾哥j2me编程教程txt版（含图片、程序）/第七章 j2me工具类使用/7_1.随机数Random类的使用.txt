@@ -1,0 +1,34 @@
+Random类是产生随机数用的，这里简单写明用法，不给出例子了。
+
+//引入Random类
+import java.util.Random;
+
+//用法：
+import java.util.Random;
+Random random=new Random();
+int i=random.nextInt(100);
+//产生100以内下一个随机整数
+
+
+//以当前时间为种子，新建一个随机数实例
+Random random=new Random();
+
+//设置种子为l
+void setSeed(long l)
+
+//产生下一个随机整数
+public int nextInt()
+
+//产生下一个i以内的整数
+public int nextInt(int i)
+
+//产生下一个随机长整数
+public long nextLong()
+
+//产生下一个随机浮点数
+public float nextFloat()
+
+//产生下一个随机双精度数
+public double nextDouble()
+
+tengge   QQ:930372551

@@ -1,0 +1,84 @@
+/*本程序可以播放压缩包内的1.mid，打包前请将1.mid放入压缩包中。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import javax.microedition.media.*;
+//使用上述包中的Manager类和Player类
+import java.io.InputStream;
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Form form;
+    Display display;
+    Command play,stop,exit;
+    Player player;
+    
+    public Midlet()
+    {
+        form=new Form("播放音乐");
+        display=Display.getDisplay(this);
+        try
+        {
+            //下句可将压缩包中的文件转换为输入流
+            InputStream is=getClass().getResourceAsStream("/1.mid");
+            //创建播放器
+            player=Manager.createPlayer(is,"audio/midi");
+            //参数分别是mid数据流，类型，若你不知道类型，可写作null
+            //类型列表：
+            //audio/x-wav，wav格式
+            //audio/basic，au格式
+            //audio/mpeg，mp3格式
+            //audio/midi，mid格式
+            //audio/x-tone-seq
+            //读取音频文件
+            player.realize();
+            //获取喇叭资源
+            player.prefetch();
+            //设置循环播放次数为10
+            player.setLoopCount(10);
+            }
+        catch(Exception e)
+        {
+            display.setCurrent(new Alert("错误：",e.toString(),null,AlertType.ERROR));
+            }
+        play=new Command("播放",Command.OK,2);
+        stop=new Command("停止",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        form.append("播放音乐示范程序，请打开情景模式的警告音！");
+        //player.getContentType();获取播放类型
+        //player.getDuration();获取播放总时间
+        //player.getMediaTime();获取当前播放时间
+        //player.setMediaTime(long time);设置播放时间
+        form.addCommand(play);
+        form.addCommand(stop);
+        form.addCommand(exit);
+        }
+    
+    public void startApp()
+    {
+        display.setCurrent(form);
+        form.setCommandListener(this);
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean arg0) {}
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        try{
+            //播放
+            if(c==play) player.start();
+            //停止
+            if(c==stop) player.stop();
+            //退出
+            if(c==exit) notifyDestroyed();
+            }
+        catch(Exception e)
+        {
+            display.setCurrent(new Alert("错误：",e.toString(),null,AlertType.ERROR));
+            }
+        }
+    }
+
+/*tengge QQ:930372551*/

@@ -1,0 +1,120 @@
+/*Sprite支持精灵的旋转、镜面变换，不需要自己另写代码。本节讲了Sprite类大量方法和继承自Lawyer类的方法。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import javax.microedition.lcdui.game.*;
+
+public class Midlet extends MIDlet
+{
+    public void startApp()
+    {
+        MyCanvas.midlet=this;
+        Display.getDisplay(this).setCurrent(new MyCanvas());
+        }
+    
+    public void pauseApp() {}
+    public void destroyApp(boolean unconditional) {}}
+
+//MyCanvas类
+public class MyCanvas extends GameCanvas implements Runnable
+{
+    public static MIDlet midlet;
+    Image image;
+    Sprite sprite;
+
+    public MyCanvas()
+    {
+        super(false);
+        try
+        {
+            image=Image.createImage("/girl.png");
+            }
+        catch(Exception e) {}
+        sprite=new Sprite(image);
+        //设定精灵旋转中心
+        sprite.setRefPixelPosition(image.getWidth()/2,image.getHeight()/2);
+        setFullScreenMode(true);
+        new Thread(this).start();
+        }
+    
+    public void run()
+    {
+        Graphics g=getGraphics();
+        long startTime,endTime;
+        int rate=100;
+        while(true)
+        {
+            startTime=System.currentTimeMillis();
+            render(g);
+            endTime=System.currentTimeMillis();
+            if(endTime-startTime<rate)
+            {
+                try{
+                    Thread.sleep(rate-(endTime-startTime));
+                    }
+                catch(Exception e) {}
+                }
+            flushGraphics();
+            }
+        }    
+    
+    public void render(Graphics g)
+    {
+        g.setColor(30,40,50);
+        g.fillRect(0,0,getWidth(),getHeight());
+        //原图
+        sprite.setPosition(0,0);
+        sprite.paint(g);
+        sprite.setPosition(100,0);
+        //镜像变换
+        sprite.setTransform(Sprite.TRANS_MIRROR);
+        sprite.paint(g);
+        sprite.setPosition(0,100);
+        //旋转90度
+        sprite.setTransform(Sprite.TRANS_ROT90);
+        sprite.paint(g);
+        sprite.setPosition(100,100);
+        //旋转180度
+        sprite.setTransform(Sprite.TRANS_ROT180);
+        sprite.paint(g);
+        //另外，还有其他一些变换方法：
+        //TRANS_MIRROR_ROT180镜像旋转180度
+        //TRANS_MIRROR_ROT270镜像旋转270度
+        //TRANS_MIRROR_ROT90镜像旋转90度
+        //TRANS_NONE不变换
+        //TRANS_ROT270旋转270度
+        //
+        }
+    }
+
+/*Sprite类其他方法：
+Sprite(Image image)将整个图片作为一个精灵
+Sprite(Image image,int frameWidth,int frameHeight)将一张图片按设定长宽切割后作为一个精灵
+Sprite(Sprite sprite)复制精灵
+int getFrame()获取当前播放帧的编号
+int getFrameSequenceLength()获取帧序列中帧的数量
+int getRawFrameCount()获取帧总数量
+int getRefPixelX()取得当前旋转中心横坐标
+int getRefPixelY()取得当前旋转中心纵坐标
+void nextFrame()播放下一帧
+void prevFrame()播放上一帧
+void paint(Graphics g)画精灵
+void setFrame(int sequenceIndex)设定要播放帧的编号
+void setFrameSequence(int []sequence)设定帧序列
+void setImage(Image image,int frameWidth,int frameHeight)重设精灵图片
+void setRefPixelPosition(int x,int y)重设旋转中心
+void setTransForm(int transform)设定旋转方式
+
+〖Sprite检测碰撞的方法将在后面几节介绍〗
+
+Sprite从Lawyer继承来的方法：
+
+int getHeight()图片高度
+int getWidth()图片宽度
+int getX()图层横坐标
+int getY()图层纵坐标
+boolean isVisible()判断图层可见性
+void move(int x,int y)图层向某方向移动
+void setPosition(int x,int y)设置图层位置
+void setVisible(boolean s)设置可见性
+tengge QQ:930372551*/

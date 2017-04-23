@@ -1,0 +1,87 @@
+/*本程序下载百度首页图片并保存为e:/1.gif。创建编辑文件的知识见下章。另外，用j2me下载jar文件会引发安全错误，大家一定要注意。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import java.io.*;
+import javax.microedition.io.*;
+import javax.microedition.io.file.FileConnection;
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Form form;
+    Display display;
+    Command send,exit;
+    
+    public Midlet()
+    {
+        form=new Form("下载文件");
+        display=Display.getDisplay(this);
+        send=new Command("下载",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        form.append("按左键下载百度首页图片！");
+        form.addCommand(send);
+        form.addCommand(exit);
+        }
+    
+    public void startApp()
+    {
+        display.setCurrent(form);
+        form.setCommandListener(this);
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean arg0) {}
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==send) send();
+        else if(c==exit) notifyDestroyed();
+        }
+    
+    //有关下载文件的东西全在这个方法里，请认真看！
+    public void send()
+    {
+        try
+        {
+            //下载文件
+            //建立连接
+            HttpConnection connection=(HttpConnection)Connector.open("http://m.baidu.com/static/l.gif");
+            //读取数据长度
+            int length=(int)connection.getLength();
+            //新建byte数组
+            byte[] bytes=new byte[length];
+            //打开数据输入流
+            DataInputStream is=connection.openDataInputStream();
+            //数据全读到数组中
+            is.readFully(bytes);
+            is.close();
+            connection.close();
+            //保存文件
+            //新建文件连接
+            FileConnection file=(FileConnection)Connector.open("file:///e:/1.gif",Connector.READ_WRITE,true);
+            //不存在就创建文件，存在就删除再创建文件
+            if(!file.exists())
+            file.create();
+            else
+            {
+                file.delete();
+                file.create();
+                }
+            //打开数据输出流对象
+            DataOutputStream os=file.openDataOutputStream();
+            //byte数组写入文件
+            os.write(bytes);
+            os.close();
+            file.close();
+            form.delete(0);
+            form.append("任务完成！");
+            }
+        catch(Exception e)
+        {
+            display.setCurrent(new Alert("错误提示：",e.toString(),null,AlertType.ERROR));
+            }
+        }
+    }
+
+/*tengge QQ:930372551*/

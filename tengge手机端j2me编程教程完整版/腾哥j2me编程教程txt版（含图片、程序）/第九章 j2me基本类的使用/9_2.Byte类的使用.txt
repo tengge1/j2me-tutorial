@@ -1,0 +1,11 @@
+//Byte字节类仅可存放0-255
+byte bv=Byte.MAX_VALUE;//Byte类可存放最大值
+byte bv=Byte.MIN_VALUE;//Byte类可存放最小值
+Byte b=new Byte((byte)10);//创建Byte对象
+byte bv=b.byteValue();//返回byte值
+b.equals(new Byte(10));//返回true
+int code=b.hashCode();//返回哈希值
+byte bv=Byte.parseByte("11");//将字符串按10进制转为byte
+byte bv=Byte.parseByte("1f",16);//将字符串按16进制转为byte
+String s=b.toString();//Byte类转字符串
+//QQ:930372551

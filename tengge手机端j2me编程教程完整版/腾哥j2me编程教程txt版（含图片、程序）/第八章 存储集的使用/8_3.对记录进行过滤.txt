@@ -1,0 +1,21 @@
+RecordFilter接口可以对记录进行过滤。
+示例用法：
+import javax.microedition.rms.RecordFilter;
+
+class Filter implements RecordFilter
+{
+    //必须重写matches方法
+    public boolean matches(byte[] record)
+    {
+        if(byte[0]==(byte)'a') return(true);
+        else return(false);
+        }
+    }
+
+//该类放在enumerateRecords方法第一个参数位置可对记录进行过滤，要留下的记录返回true，否则false。
+//RecordEnumeration enum=recordstore.enumerateRecords(new Filter(),null,true);
+
+boolean matches(byte[] candidate):如果候选记录通过了过滤规则，则返回true
+
+作者：tengge
+QQ:930372551

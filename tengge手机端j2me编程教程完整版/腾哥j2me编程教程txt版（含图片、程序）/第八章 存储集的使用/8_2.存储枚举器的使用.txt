@@ -1,0 +1,41 @@
+RecordEnumeration存储枚举类用来列举出一个存储集中所有记录，还可以配合RecordComparator，RecordFilter对记录进行排序和过滤。
+使用方法举例：
+
+import javax.microedition.rms.*;
+RecordStore store;
+try
+{
+    //打开一个存储集
+    store=RecordStore.openRecordStore("rms",true);
+    //enumerateRecords第一个参数表示排序（RecordComparator子类），第二个参数表示过滤（RecordFilter子类），第三个表示是否及时更新
+    RecordEnumeration enum=store.enumerateRecords(null,null,true);
+    while(enum.hasNextElement())
+    {
+        //取得下一个记录id
+        int id=enum.nextRecordId();
+        //取得下一个记录record
+        char []record=enum.nextRecord(); 
+        }
+    enum.destroy();
+    store.closeRecordStore();
+    }
+catch(Exception e)
+{}
+
+（1）常用方法：
+void destroy():销毁枚举器
+boolean isKeptUpdate():指出在下面的记录存储集改变后该枚举器是否自动生成
+keepUpdated(boolean keepUpdated):改变keepUpdated状态
+void rebuild():引起枚举器管理的索引重新生成，可能导致条目的重新排序
+void reset():把枚举器设置成其刚刚创建后的状态
+（2）访问方法：
+ boolean hasNextElement():测试在从前的道最后一个的顺序中是否还有可以枚举的记录
+boolean hasPreviousElement():测试在从最后一个到前一个的顺序中是否还有可以枚举的记录
+byte[] nextRecord():获取存储集中的下一个记录
+byte[] previousRecord():获取存储集中的前一个记录
+int peviousRecordId():获取前一条记录的ID
+int nextRecordId():获取下一条记录的ID
+int numRecords():获取记录的数量（这是在使用过滤器的时候是很重要的）
+
+作者：tengge
+QQ：930372551

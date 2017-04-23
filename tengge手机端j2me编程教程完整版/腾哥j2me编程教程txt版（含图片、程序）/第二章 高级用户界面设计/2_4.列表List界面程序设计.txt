@@ -1,0 +1,109 @@
+/*这节我们学习列表界面项目元素的添加、删除，并进一步熟悉按钮的使用。列表界面List也是Screen类的子类，也可以显示在屏幕上。列表共有三种，我们仅以简单列表为例介绍。
+注意：列表第一项的编号为0，最后一项为总项数减一
+*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    List list;
+    Command ok,append,delete,exit;
+    
+    protected void startApp()
+    {
+        //创建列表实例
+        list=new List("列表",List.IMPLICIT);
+        //两个参数分别是列表名称，列表类型
+        //列表类型有以下几种：
+        //List.IMPLICIT一般列表
+        //List.EXCLUSIVE单独列表
+        //List.MULTIPLE复选列表
+        //大家可选择不同样式看一下效果
+        
+        //在列表上添加项目，null表示不添加图片
+        list.append("列表项目一",null);
+        list.append("列表项目二",null);
+                
+        //初始化按钮实例
+        ok=new Command("确定",Command.OK,2);
+        append=new Command("添加",Command.OK,2);
+        delete=new Command("删除",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+
+        //添加按钮到列表界面
+        list.addCommand(ok);
+        list.addCommand(exit);
+        list.addCommand(append);
+        list.addCommand(delete);
+        
+        //取得当前界面的显示控制
+        Display display=Display.getDisplay(this);
+        //将当前界面设为列表界面
+        display.setCurrent(list);
+        
+        //监听列表界面的按键，当用户按键后执行commandAction方法
+        list.setCommandListener(this);
+            }
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==ok)
+        {
+            //list.size获取列表项目总数
+            if(list.size()>0)
+            {
+                //isSelected某项被选中返回 true，否则返回 false
+                if(list.isSelected(0))
+                {
+                    //在第一个位置插入新的一项，null表示不添加图片
+                    list.insert(0,"第一项被选中！",null);
+                    }
+                else
+                {
+                    //getSelectedIndex();获取当前光标选中第几项
+                    int a=list.getSelectedIndex();
+                    list.insert(0,"位置："+a,null);
+                    //list.getString(编号)获得编号项的内容
+                    list.insert(0,"最后一项内容："+list.getString(list.size()-1),null);
+                    }
+                }
+            }
+        if(c==exit)
+        {
+            destroyApp(true);
+            notifyDestroyed();
+            }
+        if(c==append)
+        {
+            //添加项目
+            list.append("新增项目",null);
+            }
+        if(c==delete)
+        {
+            //删除最后一个列表项目
+            list.delete(list.size()-1);
+            }
+        }
+    
+    protected void pauseApp(){}
+    protected void destroyApp(boolean arg0){}
+}
+
+/*新东西在程序中都解释了，这里就不解释了。
+列表界面的其他方法：
+List(String title,int listType,String[] stringElements,Image[] imageElements)：使用预先定义的一组选项和相应的图像来构造一个list
+
+int append(String stringPatt,Image imagePart):添加一个元素（choice）到一个列表（也可以指定一个可选的图像）
+void delete(int elementNum):删除一个元素
+void insert(int elementNum,String stringPart,Image imagePart):将一个元素（字符串和图像）插入列表
+void set(int elementNum,String stringPart,Image imagePart):直接设置一个元素的字符串和图像
+Image getImage(int elementNum):返回与一个元素相关的图像String getString(int elementNum):返回一个与元素相关的字符串
+boolean isSelected(int elementNum):返回一个布尔值，表示一个特定的选项是否被选中
+int getSelectedIndex():获取选择第几项
+int getSelectedFlags(boolean[] selectedArray_return):将当前选项的被选状态填充到一个布尔数组中
+void setSelectedFlags(boolean[] slectedArray):基于一个布尔值数组来直接设定选择
+int size():获取list中元素的个数
+
+tengge QQ:930372551
+*/

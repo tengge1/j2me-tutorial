@@ -1,0 +1,112 @@
+/*GameCanvas继承自Canvas，具有Canvas的所有功能。但我们实际使用时，并不那么用。我们的思路是这样的。*/
+/*1.先在GameCanvas提供的一张默认图片off-screen上画图，画好后用flushGraphics方法直接将off-screen显示在屏幕上。
+2.采用getKeyStatus方法主动查询用户按键情况，而不是等到用户按键再决定做什么动作。
+3.我们常把所有东西写入一个线程中。*/
+/*不会的东西请看第三章，以前讲过的这里就不加注释了。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import javax.microedition.lcdui.game.GameCanvas;
+//GameCanvas类
+
+public class Midlet extends MIDlet
+{
+    public Midlet()
+    {
+        //将本身和Display对象传给其他类
+        MyCanvas.midlet=this;
+        MyCanvas.display=Display.getDisplay(this);
+        }
+    
+    public void startApp()
+    {
+        new MyCanvas();
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean unconditional) {}
+    }
+
+//继承GameCanvas类
+public class MyCanvas extends GameCanvas implements Runnable
+{
+    //接收其他类传来的变量必须是静态的
+    public static MIDlet midlet;
+    public static Display display;
+    Thread thread;
+    boolean running;
+    Graphics g;//用于接收off-screen
+    int X,Y;//物体位置
+        
+    public MyCanvas()
+    {
+        //true时抑制键盘事件，false时不抑制
+        super(false);
+        running=true;
+        X=getWidth()/2;
+        Y=getHeight()/2;
+        thread=new Thread(this);
+        g=getGraphics();
+        thread.start();
+        display.setCurrent(this);
+        setFullScreenMode(true);
+        }
+    
+    public void run()
+    {
+        while(running)
+        {
+            //取得当前时间（自1970年1月1日到现在的毫秒数）
+            long time1=System.currentTimeMillis();
+            input();//按键控制方法
+            render();//画off-screen方法
+            flushGraphics();//将off-screen显示在屏幕上
+            long time2=System.currentTimeMillis();
+            //如果时间不够长，就补一段时间，这是为了保持游戏以一定的速度运行
+            if(time2-time1<100)
+            {
+                try{Thread.sleep(time2-time1);}
+                catch(Exception e) {}
+                }
+            }
+        }
+    
+    //按键控制方法
+    public void input()
+    {
+        //取得按键状态
+        int state=getKeyStates();
+        if((state&UP_PRESSED)!=0)
+        Y-=10;//按下上键
+        if((state&DOWN_PRESSED)!=0)
+        Y+=10;//按下下键
+        if((state&LEFT_PRESSED)!=0)
+        X-=10;//按下左键
+        if((state&RIGHT_PRESSED)!=0)
+        X+=10;//按下右键
+        if((state&FIRE_PRESSED)!=0)
+        midlet.notifyDestroyed();//按下5键
+        //GAME_A_PRESSED：1键
+        //GAME_B_PRESSED：3键
+        //GAME_C_PRESSED：5键
+        //GAME_D_PRESSED：7键
+        //下面可避免物体跑出屏幕范围
+        if(X<0) X=0;
+        if(X>getWidth()-20) X=getWidth()-20;
+        if(Y<0) Y=0;
+        if(Y>getHeight()-20) Y=getHeight()-20;
+        }
+    
+    //画图方法
+    public void render()
+    {
+        g.setColor(30,40,50);
+        g.fillRect(0,0,getWidth(),getHeight());
+        g.setColor(250,100,120);
+        g.fillArc(X,Y,20,20,0,360);
+        }
+    }
+
+
+/*tengge QQ:930372551*/

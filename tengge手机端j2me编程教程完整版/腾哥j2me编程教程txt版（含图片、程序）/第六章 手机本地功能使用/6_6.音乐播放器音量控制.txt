@@ -1,0 +1,91 @@
+/*本程序可以可以控制播放压缩包内1.mid的音量，使用VolumeControl类。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import javax.microedition.media.*;
+import javax.microedition.media.control.VolumeControl;
+import java.io.InputStream;
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Form form;
+    Display display;
+    Command play,stop,exit,up,down;
+    Player player;
+    VolumeControl control;//音量控制
+    
+    public Midlet()
+    {
+        form=new Form("音量控制");
+        display=Display.getDisplay(this);
+        try
+        {
+            InputStream is=getClass().getResourceAsStream("/1.mid");
+            player=Manager.createPlayer(is,"audio/midi");
+            player.realize();
+            player.prefetch();
+            //下一句取得播放器的音量控制权
+            control=(VolumeControl)player.getControl("VolumeControl");
+            //设置音量大小为30（0-100）
+            control.setLevel(30);
+            //设置静音，true时没声音
+            control.setMute(false);
+            }
+        catch(Exception e)
+        {
+            display.setCurrent(new Alert("错误：",e.toString(),null,AlertType.ERROR));
+            }
+        play=new Command("播放",Command.OK,2);
+        stop=new Command("停止",Command.OK,2);
+        up=new Command("增大音量",Command.OK,2);
+        down=new Command("减小音量",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        form.append("控制音量示范程序，请打开情景模式的警告音！请将1.mid放到压缩包内。");
+        form.addCommand(play);
+        form.addCommand(stop);
+        form.addCommand(exit);
+        form.addCommand(up);
+        form.addCommand(down);
+        }
+    
+    public void startApp()
+    {
+        display.setCurrent(form);
+        form.setCommandListener(this);
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean arg0) {}
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        try{
+            if(c==play) player.start();
+            if(c==stop) player.stop();
+            if(c==up)
+            {
+                //取得当前播放音乐大小
+                int level=control.getLevel();
+                level+=10;
+                if(level>100) level=100;
+                //重设音量大小（0-100，0静音，100最大音量）
+                control.setLevel(level);
+                }
+            if(c==down)
+            {
+                int level=control.getLevel();
+                level-=10;
+                if(level<0) level=0;
+                control.setLevel(level);
+                }
+            if(c==exit) notifyDestroyed();
+            }
+        catch(Exception e)
+        {
+            display.setCurrent(new Alert("错误：",e.toString(),null,AlertType.ERROR));
+            }
+        }
+    }
+
+/*tengge QQ:930372551*/

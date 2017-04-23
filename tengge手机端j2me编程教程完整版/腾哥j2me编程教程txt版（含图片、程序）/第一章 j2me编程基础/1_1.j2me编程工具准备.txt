@@ -1,0 +1,27 @@
+j2me是java 2 micro edition的缩写。手机端j2me编程理论上适合所有支持java的手机。在手机端进行j2me编程需要准备以下工具：
+
+1.utf8格式的文本编辑器：s40的minicommander可能行，s60的可以用编py s60的脚本编辑，ipro7等，但不要使用x-plore，那是utf16编码的。
+2.janino，手机端j2me编译器，可以将j2me源码编译成class文件。
+3.preverifier，手机端j2me审核器，可将编译产生的class文件修改为可执行文件。
+4.jar打包工具。非智能机用minicommander，智能机可用x-plore。
+
+在正式编程前，我们还要做以下准备：
+1.需要对janino和preverifier做以下设置：
+（1）janino：打开软件，前两项填“e:/j2me/java/”，第三项填“UTF-8”，其余不填。
+（2）preverifier：前两项填“e:/j2me/java/”，其余不填。
+2.在e盘根目录新建j2me文件夹，在j2me文件夹中新建java文件夹，在java文件夹中新建META-INF文件夹。下载本人上传的manifest.mf放到META-INF文件夹中。注意：自己修改manifest.mf文件也要用u8编码，注意冒号后面要空一格。manifest.mf文件格式如下：
+
+Manifest-Version: 1.0
+MicroEdition-Configuration: CLDC-1.0
+MIDlet-Name:  安装名称
+MIDlet-Icon:  /icon.png
+MIDlet-Vendor:  软件作者
+MIDlet-1:  软件名称,/icon.png,Midlet
+MIDlet-Version: 1.0
+MicroEdition-Profile: MIDP-1.0
+MIDlet-Description:  软件描述
+
+
+好了，这节就到这里。
+
+//tengge QQ:930372551

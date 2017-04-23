@@ -1,0 +1,72 @@
+/*本程序读取本地文件。测试程序前，请新建e:/1.txt，用utf-8编码写入一些文字。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import java.io.DataInputStream;
+import javax.microedition.io.file.FileConnection;//文件连接
+import javax.microedition.io.Connector;
+
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Form form;
+    Display display;
+    Command send,exit;
+    
+    public Midlet()
+    {
+        form=new Form("读取文件");
+        display=Display.getDisplay(this);
+        send=new Command("读取",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        form.append("请以utf-8编码创建文件“e:/1.txt”。按左键获取文件内容！");
+        form.addCommand(send);
+        form.addCommand(exit);
+        }
+    
+    public void startApp()
+    {
+        display.setCurrent(form);
+        form.setCommandListener(this);
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean arg0) {}
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==send) send();
+        else if(c==exit) notifyDestroyed();
+        }
+    
+    //有关读取文件的东西全在这个方法里，请认真看！
+    public void send()
+    {
+        //用try避免因无法读取文件引发异常导致程序错误
+        try
+        {
+            //首先打开一个连接，并强制转化为FileConnection类型，注意文件地址的写法是"file:///"+路径（注意有三道斜杠）
+            FileConnection connection=(FileConnection)Connector.open("file:///e:/1.txt");
+            //fileSize方法可取得文件大小
+            int size=(int)connection.fileSize();
+            //打开数据流对象
+            DataInputStream is=connection.openDataInputStream();
+            byte[] bytes=new byte[size];
+            //将数据全部读入数组中。
+            is.readFully(bytes);
+            is.close();
+            connection.close();
+            //进行编码转换
+            String s=new String(bytes,"utf-8");
+            form.delete(0);
+            //显示在Form上
+            form.append(s);
+            }
+        catch(Exception e)
+        {
+            }
+        }
+    }
+
+/*tengge QQ:930372551*/

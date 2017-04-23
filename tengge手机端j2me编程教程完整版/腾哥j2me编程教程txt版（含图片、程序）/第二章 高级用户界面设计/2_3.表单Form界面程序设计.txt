@@ -1,0 +1,86 @@
+/*这一节，我们将学习Form界面以及Form界面上文本框、按钮、字符串的添加方法，Form界面上的按钮和上节TextBox界面的按钮使用方法完全一样，不解释了。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Form form;
+    Command ok,exit;
+    TextField textfield;//文本框
+
+    protected void startApp()
+    {
+        //初始化Form实例，标题为“标题”
+        form=new Form("标题");
+        //Form可以看做一个容器，Item类的子类都可以添加
+        
+        //向Form上添加文字
+        form.append("个人简历：");
+        
+        //新建文本框
+        textfield=new TextField("姓名：","王小丫",10,TextField.ANY);
+        //TextField的参数分别是名称，初始值，输入最大长度，允许输入类型
+        //允许输入类型有以下取值：
+        //TextField.ANY任意取值
+        //TextField.NUMERIC数字
+        //TextField.URL网址
+        //TextField.PASSWORD密码
+        //TextField.EMAILADDR邮件地址
+        //TextFile.UNEDITABLE不可编辑
+        //TextField.DECIMAL小数
+        
+        //添加文本框到form
+        form.append(textfield);
+        
+        //新建按钮
+        ok=new Command("确定",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        //优先级最高为0，但普通应用程序不能设为0，设为2就好了
+
+        //添加两个按钮到Form界面
+        form.addCommand(ok);
+        form.addCommand(exit);
+        
+        //取得当前界面的显示控制
+        Display display=Display.getDisplay(this);
+        //将当前界面设为Form界面
+        display.setCurrent(form);
+        
+        //监听form界面的按键，当用户按键后执行commandAction方法
+        form.setCommandListener(this);
+            }
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==ok)//按左软键动作
+        {
+            //取得文本框中的字符
+            String s=textfield.getString();
+            //向Form中添加文字
+            form.append(s+"你好！");
+            }
+        if(c==exit)//按右软键退出
+        {
+            destroyApp(true);
+            notifyDestroyed();
+            }        
+        }
+    
+    protected void pauseApp(){}
+    protected void destroyApp(boolean arg0){}
+}
+
+/*新东西在程序中都解释了，这里就不解释了。
+Form界面的其他方法：
+Form(String title,Item[] items):用一个标题创建一个Form，在这个Form上事先已经有一数组的item
+int append(Image image):增加一个图像
+int append(Item item):增加一个item对象
+void delete(int itemNum):通过索引删除一个item
+void insert(int itemNum,Item item):在一个确定的索引号处插入一个item
+void set(int itemNum,Item item):设置一个item状态改变的监听器
+void setItemStateListener(ItemStateListener iListener):设置一个item状态改变的监听器
+int size():获取Form中的item数量
+
+tengge QQ:930372551
+*/

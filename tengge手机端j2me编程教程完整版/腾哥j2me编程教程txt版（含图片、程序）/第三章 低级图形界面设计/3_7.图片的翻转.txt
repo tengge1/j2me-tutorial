@@ -1,0 +1,95 @@
+/*这节我们学习图片的旋转和翻转，并学习如何在图片上绘图。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+
+public class Midlet extends MIDlet
+{
+    Canvas canvas;
+    Display display;
+    
+    public Midlet()
+    {
+        canvas=new MyCanvas();
+        display=Display.getDisplay(this);
+        }
+    
+    public void startApp()
+    {
+        display.setCurrent(canvas);
+        canvas.setFullScreenMode(true);
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean unconditional){}
+}
+
+public class MyCanvas extends Canvas
+{
+    Image image1,image2,image3,image4;    
+    public MyCanvas()
+    {
+        try
+        {
+            image1=Image.createImage("/tree.png");
+            }
+        catch(Exception e) {}
+        
+        int width=image1.getWidth();
+        int height=image1.getHeight();
+        
+        /*翻转图片*/
+        image2=Image.createImage(width,height);
+        image3=Image.createImage(height,width);
+        image4=Image.createImage(height,width);
+        
+        //产生一个长度为width的整型数组
+        int []rgb=new int[width];
+        
+        //取得图片的Graphics对象，可以用它在图片上画图。
+        Graphics g2=image2.getGraphics();
+        Graphics g3=image3.getGraphics();
+        Graphics g4=image4.getGraphics();
+        
+        for(int i=0;i<height;i++)
+        {
+            //取得图片某区域RGB值
+            image1.getRGB(rgb,0,width,0,i,width,1);
+            //在图片某区域画图
+            g2.drawRGB(rgb,0,1,0,width-i-1,width,1,true);//向下翻
+            g3.drawRGB(rgb,0,1,i,0,1,width,true);//向左翻
+            g4.drawRGB(rgb,0,1,height-i-1,0,1,width,true);//向右翻
+            }
+        }
+    
+    
+    protected void paint(Graphics g)
+    {
+        g.setColor(20,20,20);
+        g.fillRect(0,0,getWidth(),getHeight());
+        g.drawImage(image1,10,10,Graphics.TOP|Graphics.LEFT);
+        g.drawImage(image2,100,10,Graphics.TOP|Graphics.LEFT);
+        g.drawImage(image3,10,100,Graphics.TOP|Graphics.LEFT);
+        g.drawImage(image4,100,100,Graphics.TOP|Graphics.LEFT);
+        }
+    
+    protected void keyPressed(int keycode)
+    {}
+    
+    protected void keyReleased(int keycode) {}
+    
+    protected void keyRepeated(int keycode) {}
+    }
+
+/*getRGB用法：
+public void getRGB(int[] rgbData,int offset,int scanlength,int x,int y,int width,int height)
+这个方法可以从图片的指定区域读取ARGB像素值，并存储到rgbData数组中，rgbData中的数据是以0xAARRGGBB格式存储的，代表每个像素的颜色属性和透明属性。
+
+offset是从数组的第几个开始存。
+scanlength为扫描一行的宽度
+（x,y）是图像区域的左上角坐标，width和height分别是所截取图像区域的宽度和高度，以像素为单位。
+
+setRGB前七个参数与上面完全一致，第八个为boolean型，如果有透明通道，取true，否则false。
+
+tengge QQ:930372551*/

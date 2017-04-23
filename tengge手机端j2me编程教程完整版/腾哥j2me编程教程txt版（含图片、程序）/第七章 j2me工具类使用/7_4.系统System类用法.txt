@@ -1,0 +1,90 @@
+/*System类是系统类，可以获取系统信息和当前时间，提供数组复制等。*/
+
+import javax.microedition.midlet.*;
+import javax.microedition.lcdui.*;
+import java.lang.System;
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Display display;
+    Form form;
+    Command view,exit;
+    
+    public Midlet()
+    {
+        display=Display.getDisplay(this);
+        form=new Form("查看信息");
+        view=new Command("查看",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        form.addCommand(view);
+        form.addCommand(exit);
+        form.setCommandListener(this);
+        }
+        
+    public void startApp()
+    {
+        display.setCurrent(form);
+        }
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==view) view();
+        if(c==exit) notifyDestroyed();
+        }
+        
+    public void view()
+    {
+        //系统当前时间（从1970年初到现在的毫秒数）
+        form.append("当前时间："+System.currentTimeMillis());
+        //手机平台型号
+        form.append("\nplatform:"+System.getProperty("microedition.platform"));
+        //手机串号
+        form.append("\nIMEI:"+System.getProperty("IMEI"));
+        //SMS服务中心号码
+        form.append("\nsmsc:"+System.getProperty("wireless.messaging.sms.smsc"));
+        //CLDC版本属性
+        form.append("\nCLDC:"+System.getProperty("microedition.configuration"));
+        //MIDP版本属性
+        form.append("\nMIDP:"+System.getProperty("microedition.profiles"));
+        //软件作者
+        form.append("\nVendor:"+System.getProperty("Midlet-Vendor"));
+        //软件版本
+        form.append("\nVersion:"+System.getProperty("Midlet-Version"));
+        //软件大小
+        form.append("\nData-Size:"+System.getProperty("Midlet-Data-Size"));
+        //安装包名称
+        form.append("\nMidlet-Name:"+System.getProperty("Midlet-Name"));
+        //安装包大小
+        form.append("\nJar-Size:"+System.getProperty("Midlet-Jar-Size"));
+        //安装包下载地址
+        form.append("\nJar-Url:"+System.getProperty("Midlet-Jar-URL"));
+        //系统编码
+        form.append("\nencoding:"+System.getProperty("microedition.encoding"));
+        //区域设置
+        form.append("\nlocale:"+System.getProperty("microedition.locale"));
+        //判断是否支持MMAPI
+        form.append("\nMMAPI:"+System.getProperty("microedition.media.version"));
+        //判断是否支持蓝牙
+        form.append("\nBlueTooth:"+System.getProperty("bluetooth.version"));
+        //判断是否支持个人信息管理
+        form.append("\nPIM:"+System.getProperty("microedition.pim.version"));
+        //判断是否支持文件系统
+        form.append("\nfile:"+System.getProperty("microedition.io.file.FileConnection.version"));
+        //判断是否支持SIP
+        form.append("\nSIP:"+System.getProperty("microedition.sip.version"));
+        //判断是否支持M3G
+        form.append("\nM3G:"+System.getProperty("microedition.m3g.version"));
+        }
+
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean arg0) {}
+    }
+
+/*其他重要方法：
+public static void arraycopy(Object src,int src_position,Object dst,int dst_position,int length)复制数组
+public static void exit(int status)退出系统
+public static void gc()回收内存
+public static final PrintStream out标准输出
+public static final PrintStream err标准出错输出
+tengge QQ:930372551*/

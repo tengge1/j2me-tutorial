@@ -1,0 +1,27 @@
+/*这一节，我们编写一个j2me小程序，来体会一下从j2me源码到jar安装文件的制作过程。
+首先，编写java源代码default.java并放到e:/j2me/java/文件夹中（可以直接修改本文件名为default.java放到前述文件夹中），代码看不懂没关系，我们以后慢慢学。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+
+public class Midlet extends MIDlet
+{
+    public void startApp()
+    {
+        Display dis=Display.getDisplay(this);
+        Form f=new Form("示范程序");
+        f.append("欢迎来到j2me世界！");
+        dis.setCurrent(f);
+        }
+    
+    public void pauseApp(){}
+    
+    public void destroyApp(boolean unconditional){}
+}
+
+/*我们将文件改名为default.java后放到e:/j2me/java/下，运行Janino点编译，一会儿提示编译完成，这时前述文件夹下出现Midlet.class。
+我们再打开preverifier点审核，一会审核成功。
+我们打开x-plore，将Midlet.class连同META-INF文件夹（里面有我们前一节下载的mf格式的文件）打包成zip，改后缀为jar安装即可。
+我们已经成功制作第一个jar软件。*/
+
+//tengge QQ:930372551

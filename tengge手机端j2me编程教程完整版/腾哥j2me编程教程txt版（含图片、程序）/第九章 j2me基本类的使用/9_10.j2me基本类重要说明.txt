@@ -1,0 +1,28 @@
+java.lang包中有很多类，本章最重要的是进制转换，各种数据与字符串的转换，编码解码等，重要的类有Integer，String，StringBuffer。手机打字很麻烦，Float，Double，Long等类不能详讲。
+
+各种数据转字符串可调用各个类的toString方法或者String类的valueOf方法。如：
+
+String sf=(new Float(5.3)).toString();
+或
+String sf=String.valueOf(5.3);
+
+字符串转各种数据类型可调用响应类的parse方法。
+
+short s=Short.parseShort("10");
+
+各种编码与字符串转换可以用String构造函数和getBytes方法。(编码可以试试utf-8,utf-7,utf-16,gbk,big5)
+
+byte []bytes="haha!";
+String s=new String(bytes,"utf-8");
+byte []bytes2=s.getBytes("gbk");
+
+16进制字符串转10进制整数可以用Integer的parseInt方法。
+
+Integer i=Integer.parseInt("1a3f",16);
+
+10进制整数转16进制字符串可以用Integer的toHexString方法。
+
+String s=Integer.toHexString(35);
+
+tengge
+QQ:930372551

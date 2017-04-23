@@ -1,0 +1,75 @@
+/*本节讲新建、删除文件，给文件改名，查看文件大小及属性，设置属性。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import javax.microedition.io.file.FileConnection;
+import javax.microedition.io.Connector;
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Form form=new Form("文件");
+    Command newdir=new Command("新建",Command.OK,2);
+    Command deletedir=new Command("删除",Command.OK,2);
+    Command attribute=new Command("查看",Command.OK,2);
+    Command exit=new Command("退出",Command.EXIT,2);
+    
+    public void startApp()
+    {
+        form.addCommand(newdir);
+        form.addCommand(deletedir);
+        form.addCommand(attribute);
+        form.addCommand(exit);
+        form.append("点击新建，将新建e:/tengge.txt，点击删除，将删除e:/tengge.txt，点击查看，将查看e:/tengge.txt大小和各种属性。\n");
+        Display.getDisplay(this).setCurrent(form);
+        form.setCommandListener(this);
+        }
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        try
+        {
+            FileConnection connection=(FileConnection)Connector.open("file:///e:/tengge.txt");
+            if(c==newdir)
+            {
+                //新建一个文件e:/tengge.txt，文件存在时发生错误
+                connection.create();
+                form.append("创建e:/tengge.txt成功！\n");
+                }
+            if(c==deletedir)
+            {
+                //删除一个文件，文件不存在时发生错误
+                connection.delete();
+                form.append("删除e:/tengge.txt成功！\n");
+                }
+            if(c==attribute)
+            {
+                form.append("文件大小："+connection.fileSize()+"\n");
+                //判断文件是否可读
+                if(connection.canRead())
+                form.append("文件可读\n");
+                //void setReadable(boolean)，true时设置可读，false时不可读，以后同前
+                //判断文件是否可写
+                if(connection.canWrite())
+                form.append("文件可写\n");
+                //void setWritable(boolean)设置文件可写
+                //判断文件是否隐藏
+                if(!connection.isHidden())
+                form.append("文件不隐藏\n");
+                //void setHidden(boolean)设置隐藏
+                }
+            }
+        catch(Exception e)
+        {
+            Display.getDisplay(this).setCurrent(new Alert("错误",e.toString(),null,AlertType.ERROR));
+            }
+        
+        if(c==exit) notifyDestroyed();
+        }
+    
+    public void pauseApp() {}
+    public void destroyApp(boolean unconditional) {}}
+/*文件中还有其他操作：
+boolean exists()判断文件存在性
+void rename(String)修改名称
+
+tengge QQ:930372551*/

@@ -1,0 +1,88 @@
+/*本节讲新建、删除文件夹，列出文件夹中文件名称，给文件夹改名，查看文件夹内总文件大小及属性，设置属性。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import javax.microedition.io.file.FileConnection;
+import javax.microedition.io.Connector;
+import java.util.Enumeration;
+//枚举器
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Form form=new Form("路径");
+    Command newdir=new Command("新建",Command.OK,2);
+    Command deletedir=new Command("删除",Command.OK,2);
+    Command listdir=new Command("遍历",Command.OK,2);
+    Command attribute=new Command("查看",Command.OK,2);
+    Command exit=new Command("退出",Command.EXIT,2);
+    
+    public void startApp()
+    {
+        form.addCommand(newdir);
+        form.addCommand(deletedir);
+        form.addCommand(listdir);
+        form.addCommand(attribute);
+        form.addCommand(exit);
+        form.append("点击新建，将新建e:/tengge/，点击删除，将删除e:/tengge/，点击遍历，将列出e:/tengge/中所有文件和文件夹，点击查看，将查看e:/tengge/目录总大小和各种属性。\n");
+        Display.getDisplay(this).setCurrent(form);
+        form.setCommandListener(this);
+        }
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        try
+        {
+            FileConnection connection=(FileConnection)Connector.open("file:///e:/tengge/");
+            if(c==newdir)
+            {
+                //新建一个文件夹e:/tengge/，文件夹不存在时发生错误
+                connection.mkdir();
+                form.append("创建e:/tengge成功！\n");
+                }
+            if(c==deletedir)
+            {
+                //删除一个文件夹，文件夹不存在或非空时发生错误
+                connection.delete();
+                form.append("删除e:/tengge成功！\n");
+                }
+            if(c==listdir)
+            {
+                //列出一个文件夹中的目录，文件夹不存在会发生错误
+                Enumeration enum=connection.list();
+                while(enum.hasMoreElements())
+                form.append("e:/tengge/"+(String)enum.nextElement()+"\n");
+                }
+            if(c==attribute)
+            {
+                form.append("directorySize:"+connection.directorySize(true));
+                //判断文件夹是否可读
+                if(connection.canRead())
+                form.append("文件夹可读\n");
+                //void setReadable(boolean)，true时设置可读，false时不可读，以后同前
+                //判断文件夹是否可写
+                if(connection.canWrite())
+                form.append("文件夹可写\n");
+                //void setWritable(boolean)设置文件夹可写
+                //判断文件夹是否隐藏
+                if(!connection.isHidden())
+                form.append("文件夹不隐藏\n");
+                //void setHidden(boolean)设置隐藏
+                }
+            }
+        catch(Exception e)
+        {
+            Display.getDisplay(this).setCurrent(new Alert("错误",e.toString(),null,AlertType.ERROR));
+            }
+        
+        if(c==exit) notifyDestroyed();
+        }
+    
+    public void pauseApp() {}
+    public void destroyApp(boolean unconditional) {}}
+/*文件夹中还有其他操作：
+
+boolean exists()判断文件存在性
+
+void rename(String)修改名称
+
+tengge QQ:930372551*/

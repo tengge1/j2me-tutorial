@@ -1,0 +1,21 @@
+jar安装包是zip压缩格式，最简单的jar安装包可以仅由一个类和一个manifest.mf文件构成，manifest.mf文件应放在META-INF文件夹中。
+在java中，jar安装包中的资源文件使用相对路径，例如安装包根目录下的1.png记作“/1.png”，res文件夹中的2.png记作“/res/2.png”。jar安装包中可以加入任何相关或不相关的文件，但必须有META-INF/manifest.mf文件。
+manifest.mf在电脑端编写j2me是自动生成的，但作为手机党的我们，只能自己手动制作了，manifest.mf文件是UTF-8编码，其主要内容如下：
+
+Manifest-Version: 1.0
+MicroEdition-Configuration: CLDC-1.0
+MIDlet-Name:  安装名称
+MIDlet-Icon:  /icon.png
+MIDlet-Vendor:  软件作者
+MIDlet-1:  软件名称,/icon.png,Midlet
+MIDlet-Version: 1.0
+MicroEdition-Profile: MIDP-1.0
+MIDlet-Description:  软件描述
+
+前两个是版本号，不介绍。安装名称是安装jar文件时显示的名称，/icon.png是图标文件所在的路径，软件作者写上你的名字，Midlet是首先开始运行的类，就是上一节继承自MIDlet含startApp方法的类名。软件描述随便写。
+另外，manifest.mf文件中还可能有许多其他语句，如：
+Nokia-MIDlet-Original-Display-Size: 176,208
+Nokia-MIDlet-Target-Display-Size: 240,320
+可以将前面分辨率的游戏拉伸至后面屏幕大小，还有开机自启，权限确认，删除确认，安装包大小，安装包所用内存大小等语句，这里就不一一介绍了。
+
+//tengge QQ:930372551

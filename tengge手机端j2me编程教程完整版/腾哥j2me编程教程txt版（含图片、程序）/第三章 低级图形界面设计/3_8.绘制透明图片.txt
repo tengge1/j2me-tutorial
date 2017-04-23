@@ -1,0 +1,67 @@
+/*这节我们学习如何将自己绘制的图片变为透明图片。本例中将图片上圆形的周围变为透明，大家看图片。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+
+public class Midlet extends MIDlet
+{
+    Canvas canvas;
+    Display display;
+    
+    public Midlet()
+    {
+        canvas=new MyCanvas();
+        display=Display.getDisplay(this);
+        }
+    
+    public void startApp()
+    {
+        display.setCurrent(canvas);
+        canvas.setFullScreenMode(true);
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean unconditional){}
+}
+
+public class MyCanvas extends Canvas
+{
+    Image image,rgbimage;
+    
+    public MyCanvas()
+    {
+        image=Image.createImage(80,80);
+        Graphics g=image.getGraphics();
+        g.fillArc(20,20,60,60,0,360);
+        int width=image.getWidth();
+        int height=image.getHeight();
+        int []rgb=new int[width*height];
+        image.getRGB(rgb,0,width,0,0,width,height);
+        for(int i=0;i<width*height;i++)
+        {
+            //rgb[i]&0xffffff可过滤掉透明色，只剩颜色
+            if((rgb[i]&0xffffff)==0xffffff)
+            rgb[i]&=0x00ffffff;
+            }
+        //true时创建透明图片
+        rgbimage=Image.createRGBImage(rgb,width,height,true);
+        }
+    
+    protected void paint(Graphics g)
+    {
+        g.setColor(0,0,250);
+        g.fillRect(0,0,getWidth(),getHeight());
+        g.drawImage(image,10,10,Graphics.TOP|Graphics.LEFT);
+        g.drawImage(rgbimage,100,10,Graphics.TOP|Graphics.LEFT);
+        }
+    
+    protected void keyPressed(int keycode)
+    {}
+    
+    protected void keyReleased(int keycode) {}
+    
+    protected void keyRepeated(int keycode) {}
+    }
+
+/*tengge QQ:930372551*/

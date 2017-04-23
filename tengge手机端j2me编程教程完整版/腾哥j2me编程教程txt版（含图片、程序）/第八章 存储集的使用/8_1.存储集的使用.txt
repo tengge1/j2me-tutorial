@@ -1,0 +1,62 @@
+RecordStore存储集类提供了一个永久存储的场所，可以保存游戏数据。一个游戏可以建很多存储集，listRecordStores方法可列出该游戏所有存储集名称，一个存储集可以存放很多记录。
+
+用法示例：
+
+import javax.microedition.rms.RecordStore;
+
+//存取修改数据库一定要放在try语句里边
+try
+{
+    //打开一个名称为“rms”的存储集，true表示如果存储集不存在就自动创建
+    RecordStore store=RecordStore.openRecordStore("rms",true);
+    //创建byte数组
+    byte []bytes="Hello!".getBytes();
+    //获取下一个存储位置
+    int id=store.getNextRecordID();
+    //将byte数组添加到存储集中，第二个参数是开始位置，第三个是数据长度
+    store.addRecord(bytes,0,bytes.length);
+    //数据库中记录总数
+    int num=store.getNumRecords();
+    //修改记录
+    byte []b="tengge".getBytes();
+    store.setRecord(id,b,0,b.length);
+    //获取记录
+    byte []record=store.getRecord(id);
+    //删除记录
+    store.deleteRecord(id);
+    //关闭存储集
+    store.closeRecordStore();
+    //删除存储集
+    store.deleteRecordStore();
+    }
+catch(Exception e)
+{}
+
+
+（1）存储集访问方法：
+static RecordStore openRecordStore(String recordStoreName,boolean createIfNecessary):打开一个存储集或者在它不存在的时候创建一个存储集
+void closeRecordStore():关闭一个存储集
+static void deleteRecordStore(String recordStoreName):删除一个存储集
+long getLastModified():获取存储集最后一次被修改的时间
+String getName():获取存储集的名称
+int getNumRecords():返回存储集当前记录的数量
+int getSize():返回存储集使用的总字节数
+int getSizeAvailable():获取空闲空间（谨记那些数据需要多一些的空间来存储）
+int getVersion():获取存储集的版本号（每次记录更新的时候这个数字增长1）
+static String[] listRecordStores():获取MID中可以访问的所有记录存储集的字符串数组
+    记录访问方法：
+int addRecord(byte[] data,int offset,int numBytes):向存储集中加入一条新的记录
+byte[] getRecord(int recordID):用ID来获取一条记录
+int getRecord(int recordID,byte[] buffer,int offset):把一条记录读取到buffer中
+void deleteRecord(int recordID):删除与recordID相关的记录
+void setRecord ( int recordID , byte[] newData , int offset , int numBytes ):使用新的字节数组更新与record相关联的记录的内容
+int getNextRecordID():在插入后获取下一个记录的ID
+int getRecordSize(int recordID):返回字节计算的记录存储集当前的数据大小
+RecordEnumeration enumerateRecords ( RecordFilter filter , Recordcomparator comparator,boolean keepUpdate):返回一个RecordEnumeration对象。它是用来在一个记录集合中枚举的（使用comparator参数）
+
+（2）与事件有关的参数：
+void addRecordListener(RecordListener listener):加入一个监听器对象，它可以在有这个记录存储集消息的时候被调用
+void removeRecorsListener(RecordListener listener): 移除原来用addRecordListener方法加入的监听器对象
+
+作者：tengge
+QQ:930372551

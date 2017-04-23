@@ -1,0 +1,22 @@
+虽然jad文件跟编程没什么关系，但作为教程，还应该涉及一些。jad文件是jar文件的描述文件。看这个例子：
+
+MIDlet-1: 木乃伊大战僵尸,/icon.png,PharaohTreasure
+MIDlet-Icon: /icon.png
+MIDlet-Jar-Size: 273452
+MIDlet-Jar-URL: http://download.cmgame.com/cot?ID=710259000000015585303440_303442&SD=0
+MIDlet-Name: 木乃伊大战僵尸
+MIDlet-Vendor: 华恒信通
+MIDlet-Version: 1.0.0
+MicroEdition-Configuration: CLDC-1.0
+MicroEdition-Profile: MIDP-2.0
+MJS-User-ID: 15963210431
+MIDlet-Install-Notify: http://download.cmgame.com/report?ID=710259000000015585302440_213442&SD=0
+USR-TB-CID: 710259000000015585
+USR-TB-CHID: 6118
+USR-TB-T: 20110809174804
+USR-TB-SCID: bbd28ede27ed64a213883575762cc5b2afda3f34
+
+MIDlet-1是jar安装包名称，图标和导入类，MIDlet-Icon是图标，MIDlet-Jar-Size是jar文件大小，MIDlet-Jar-URL是下载jar文件的网址，MIDlet-Name是软件名称，MIDlet-Vendor是软件作者，MIDlet-Install-Notify是安装成功后向移动服务器确认安装成功的网址，会扣费！！安装好确认扣费的游戏，直接从它给出的jar下载网址下载手动安装即可不扣费。
+jad文件在电脑上也是可以自动生成的，不过在手机上，只能自己写，utf-8编码。
+
+//tengge QQ:930372551

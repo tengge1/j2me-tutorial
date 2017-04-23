@@ -1,0 +1,26 @@
+Date类可以看做一个储存日期时间的容器，借助它，我们无法改变系统时间日期。
+
+//用法：
+import java.util.Date;
+date=new Date();//生成实例并初始化为当前时间
+long t=date.getTime();//取得储存时间（自1970年至储存时间毫秒数）
+date.setTime(10000);//重设储存时间
+
+//其他方法：
+
+//取得储存时间
+public long getTime()
+
+//设置储存时间
+public void setTime(long s)
+
+//比较两个时间实例
+public boolean equals(Object)
+
+//返回当前对象hashCode值
+public int hashCode()
+
+//将储存时间转换为字符串
+public String toString()
+
+tengge QQ:930372551

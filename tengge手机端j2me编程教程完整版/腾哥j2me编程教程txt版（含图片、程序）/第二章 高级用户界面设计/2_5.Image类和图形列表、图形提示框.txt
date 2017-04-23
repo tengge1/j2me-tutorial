@@ -1,0 +1,86 @@
+/*因为图形界面很多地方用到图片，所有我们把图形Image类介绍一下，并学习一下图形列表，和带图形的Alert提示框！*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Display display;
+    List list;
+    Command ok,exit;
+    Alert a;
+    Image image1,image2;//声明两个图片类
+    
+    protected void startApp()
+    {
+        list=new List("列表",List.EXCLUSIVE);
+        
+        //注意：打开图片时一定要用try语句，否则编译可能通不过
+        try
+        {
+            //通过createImage打开图片，使用相对路径，把两张图片一起压缩打包
+            image1=Image.createImage("/1.png");
+            image2=Image.createImage("/2.png");
+            }
+        catch(Exception e)
+        {
+            //该句在运行时产生异常时可输出异常
+            e.printStackTrace();
+            }
+        
+        //在列表上添加项目，null表示不添加图片
+        list.append("小魔女",image1);
+        list.append("东风破",image2);
+                
+        ok=new Command("确定",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        
+        //我们将在按下确定时添加文字和图片！！！
+        a=new Alert("游戏名称","",null,AlertType.INFO);
+
+        list.addCommand(ok);
+        list.addCommand(exit);
+        
+        display=Display.getDisplay(this);
+        display.setCurrent(list);
+        list.setCommandListener(this);
+            }
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==ok)
+        {
+            //取得选中列表第几项
+            int i=list.getSelectedIndex();
+            //取得第几项列表上的字符串内容
+            String s=list.getString(i);
+            if(i==0)
+            {
+                //设置提示框图片
+                a.setImage(image1);
+                //设置提示框字符串
+                a.setString(s);
+                }
+            else
+            {
+                a.setImage(image2);
+                a.setString(s);
+                }
+            display.setCurrent(a);
+            }
+            
+        if(c==exit)
+        {
+            destroyApp(true);
+            notifyDestroyed();
+            }
+        }
+    
+    protected void pauseApp(){}
+    protected void destroyApp(boolean arg0){}
+}
+
+/*新东西在程序中都解释了，这里就不解释了。
+大家可以看到许多注释都没了，这是因为它们在以前都讲过了，加上反而显得程序混乱，不会的请看前面的教程！
+tengge QQ:930372551
+*/

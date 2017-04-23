@@ -1,0 +1,58 @@
+/*Runtime类是虚拟机类，通过它可以获取当前虚拟机内存相关信息，回收内存等。*/
+
+import javax.microedition.midlet.*;
+import javax.microedition.lcdui.*;
+import java.lang.System;
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Display display;
+    Form form;
+    Command view,exit;
+    
+    public Midlet()
+    {
+        display=Display.getDisplay(this);
+        form=new Form("查看信息");
+        view=new Command("查看",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        form.addCommand(view);
+        form.addCommand(exit);
+        form.setCommandListener(this);
+        }
+        
+    public void startApp()
+    {
+        display.setCurrent(form);
+        }
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==view) view();
+        if(c==exit) notifyDestroyed();
+        }
+        
+    public void view()
+    {
+        Runtime runtime=Runtime.getRuntime();
+        //清空表单所有项目
+        form.deleteAll();
+        //虚拟机总内存
+        form.append("总内存："+runtime.totalMemory());
+        //虚拟机可用内存
+        form.append("\n可用内存："+runtime.freeMemory());
+        //回收内存
+        runtime.gc();
+        form.append("\n内存压缩中…");
+        form.append("\n总内存："+runtime.totalMemory());
+        form.append("\n可用内存："+runtime.freeMemory());
+        }
+
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean arg0) {}
+    }
+
+/*其他重要方法：
+public void exit(int status)退出系统
+tengge QQ:930372551*/

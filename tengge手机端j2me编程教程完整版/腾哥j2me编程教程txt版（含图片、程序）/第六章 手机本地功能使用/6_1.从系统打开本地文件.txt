@@ -1,0 +1,57 @@
+/*这节我们学习如何用j2me从系统打开本地文件。没注释的地方都是以前讲过的，而且跟从系统打开本地文件没什么关系，就不加注释了，望谅解。使用该程序前请将一张jpg格式的图片放E盘根目录下并命名为1.jpg。本程序打开图片文件，打开其他类型的文件一模一样。打开jar、sis、sisx等会自动启动安装程序！！*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Form form;
+    Display display;
+    Command send,exit;
+    
+    public Midlet()
+    {
+        form=new Form("打开文件");
+        display=Display.getDisplay(this);
+        send=new Command("打开",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        form.append("请将jpg图片放e盘根目录下，命名为“1.jpg”。左软键从系统打开该图片！");
+        form.addCommand(send);
+        form.addCommand(exit);
+        }
+    
+    public void startApp()
+    {
+        display.setCurrent(form);
+        form.setCommandListener(this);
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean arg0) {}
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==send) send();
+        else if(c==exit) notifyDestroyed();
+        }
+    
+    //有关从系统打开本地文件的东西全在这个方法里，请认真看！
+    public void send()
+    {
+        //用try避免因该图片不存在引发异常导致程序错误
+        try
+        {
+            //从系统打开本地文件，括号内是文件路径！
+            platformRequest("file://e:/1.jpg");
+            }
+        catch(Exception e)
+        {
+            //异常时发送空字符串结束系统请求
+            platformRequest("");
+            }
+        }
+    }
+
+/*从系统打开本地文件很简单，不解释了。
+tengge QQ:930372551*/

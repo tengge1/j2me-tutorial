@@ -1,0 +1,105 @@
+/*一个游戏，往往具有多个界面，我们来看看是怎么用一个实例进行切换和在图形界面退出程序的。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+
+public class Midlet extends MIDlet
+{
+    Canvas canvas;
+    Display display;
+    
+    public Midlet()
+    {
+        MyCanvas.midlet=this;
+        //将本身传给其他类
+        
+        MyCanvas.display=Display.getDisplay(this);
+        //将Display实例传给其他类
+        
+        MyCanvas.state=0;
+        }
+    
+    public void startApp()
+    {
+            new MyCanvas();
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean unconditional){}
+}
+
+public class MyCanvas extends Canvas implements Runnable
+{
+    public static int state;
+    public static MIDlet midlet;
+    public static Display display;
+    Thread thread;
+    
+    public MyCanvas()
+    {
+        display.setCurrent(this);
+        thread=new Thread(this);
+        thread.start();
+        }
+
+    public void run()
+    {
+        if(state==0)
+        {
+            try
+            {
+                Thread.sleep(3000);}
+            catch(Exception e) {}
+            state=2;
+            repaint();
+            }
+        }
+    
+        
+    protected void paint(Graphics g)
+    {
+        g.setColor(0,7,198);
+        g.fillRect(0,0,getWidth(),getHeight());
+        g.setColor(190,67,8);
+        if(state==0)//游戏加载画面
+        {
+            g.drawString("游戏加载中…",getWidth()/2,getHeight()/2,Graphics.HCENTER|Graphics.BASELINE);
+            }
+        if(state==2)//主菜单
+        {
+            g.drawString("4键进入游戏",getWidth()/2,getHeight()/2-10,Graphics.HCENTER|Graphics.BASELINE);
+            g.drawString("5键退出",getWidth()/2,getHeight()/2+10,Graphics.HCENTER|Graphics.BASELINE);
+            }
+        if(state==3)//游戏画面
+        {
+            g.drawString("游戏进行中，5键返回",getWidth()/2,getHeight()/2,Graphics.HCENTER|Graphics.BASELINE);
+            }
+        }
+    
+    protected void keyPressed(int keycode)
+    {
+        switch(state)
+        {
+            case 0://游戏加载画面
+            break;
+            case 2://主菜单
+            if(keycode==KEY_NUM5)
+            midlet.notifyDestroyed();
+            //上句退出程序
+            if(keycode==KEY_NUM4)
+            state=3;
+            break;
+            case 3://游戏界面
+            if(keycode==KEY_NUM5)
+            state=2;
+            }
+        repaint();
+        }
+    
+    protected void keyReleased(int keycode) {}
+    
+    protected void keyRepeated(int keycode) {}
+    }
+
+/*tengge QQ:930372551*/

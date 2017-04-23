@@ -1,0 +1,63 @@
+数学Math类提供了大量数学函数。
+
+//Math类位于lang包，该包会自动加载，可省略该句。
+import java.lang.Math;
+
+//用法，自变量和函数值要求是双精度数：
+double d=Math.sin(0.6);
+
+
+//以下是该类其他方法
+
+//求双精度d正弦
+public static native double sin(double d)
+
+//求双精度d余弦
+public static native double cos(double d)
+
+//求双精度d正切
+public static native double tan(double d)
+
+//转换为弧度
+public static double toRadians(double d)
+
+//转换为角度
+public static double toDegrees(double d)
+
+//求不大于d的最小双精度数
+public static native double sqrt(double d)
+
+//求不大于d的最小双精度数
+public static native double ceil(double d)
+
+//求不小于d的最大双精度数
+public static native double floor(double d)
+
+//下面方法是求两个整数、长整数、浮点数、双精度数的绝对值
+public static int abs(int i)
+
+public static long abs(long l)
+
+public static float abs(float f)
+
+public static double abs(double d)
+
+//下面方法是求两个整数、长整数、浮点数、双精度数的最大值
+public static int max(int x,int y)
+
+public static long max(long x,long y)
+
+public static float max(float x,float y)
+
+public static double max(double x,double y)
+
+//下面方法是求两个整数、长整数、浮点数、双精度数的最小值
+public static int min(int x,int y)
+
+public static long min(long x,long y)
+
+public static float min(float x,float y)
+
+public static double min(double x,double y)
+
+tengge  QQ:930372551

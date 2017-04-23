@@ -1,0 +1,108 @@
+/*Sprite类提供三个方法，可以方便检测与其他精灵、图片、贴图相撞，看程序。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import javax.microedition.lcdui.game.*;
+
+public class Midlet extends MIDlet
+{
+    public void startApp()
+    {
+        MyCanvas.midlet=this;
+        Display.getDisplay(this).setCurrent(new MyCanvas());
+        }
+    
+    public void pauseApp() {}
+    public void destroyApp(boolean unconditional) {}}
+
+//MyCanvas类
+public class MyCanvas extends GameCanvas implements Runnable
+{
+    public static MIDlet midlet;
+    Image arrow,girl,tree;
+    Sprite s_arrow,s_girl;
+    int state=0;//检测碰撞状态
+
+    public MyCanvas()
+    {
+        super(false);
+        try
+        {
+            arrow=Image.createImage("/arrow.png");
+            girl=Image.createImage("/girl.png");
+            tree=Image.createImage("/tree.png");
+            }
+        catch(Exception e) {}
+        s_arrow=new Sprite(arrow);
+        s_girl=new Sprite(girl);
+        s_arrow.setTransform(Sprite.TRANS_ROT270);
+        s_arrow.setPosition(0,90);
+        s_girl.setPosition(90,60);
+        setFullScreenMode(true);
+        new Thread(this).start();
+        }
+    
+    public void run()
+    {
+        Graphics g=getGraphics();
+        long startTime,endTime;
+        int rate=100;
+        while(true)
+        {
+            startTime=System.currentTimeMillis();
+            move();//箭头移动
+            detect();//检测碰撞
+            render(g);//绘图函数
+            endTime=System.currentTimeMillis();
+            if(endTime-startTime<rate)
+            {
+                try{
+                    Thread.sleep(rate-(endTime-startTime));
+                    }
+                catch(Exception e) {}
+                }
+            flushGraphics();
+            }
+        }    
+    
+    //箭头移动方法
+    public void move()
+    {
+        s_arrow.move(5,0);
+        if(s_arrow.getX()>300)
+        s_arrow.setPosition(0,80);
+        }
+    
+    //检测碰撞方法
+    public void detect()
+    {
+        //判断是否与其他精灵相撞，第二个参数true时只有不透明部分相交才相撞，false图片相交就相撞
+        if(s_arrow.collidesWith(s_girl,false))
+        state+=1;
+        //判断是否与其他图片相撞，二三个参数是图片左上角位置，第四个同上
+        if(s_arrow.collidesWith(tree,180,100,false))
+        state+=10;
+        }
+    
+    //绘图方法
+    public void render(Graphics g)
+    {
+        g.setColor(30,40,50);
+        g.fillRect(0,0,getWidth(),getHeight());
+        g.setColor(250,10,0);
+        s_arrow.paint(g);
+        s_girl.paint(g);
+        g.drawImage(tree,180,100,Graphics.VCENTER|Graphics.LEFT);
+        if(state%10==1)
+        g.drawString("正在穿过女孩",120,180,Graphics.HCENTER|Graphics.BASELINE);
+        if(state/10==1)
+        g.drawString("正在穿过小树",120,200,Graphics.HCENTER|Graphics.BASELINE);
+        state=0;
+        }
+    }
+
+/*Sprite类检测相撞方法：
+boolean collidesWith(Image image,int x,int y,boolean pixelLevel)检测精灵与图片相撞
+boolean collidesWith(Sprite s,boolean pixelLevel)检测精灵与其他精灵相撞
+boolean collidesWith(TiledLawyer t,boolean pixelLevel)检测精灵与贴图相撞
+tengge QQ:930372551*/

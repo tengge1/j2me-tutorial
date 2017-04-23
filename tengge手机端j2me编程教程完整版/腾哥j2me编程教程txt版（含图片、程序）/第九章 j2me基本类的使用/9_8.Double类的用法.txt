@@ -1,0 +1,13 @@
+Double类是双精度数，小数点位数太多，一般用不着。
+
+Double d=new Double(5.3);
+//双精度数转Double
+
+double d1=d.doubleValue();
+//Double转double
+
+double d2=Double.parseDouble("5.2");
+//字符串转double
+
+String s=d.toString();
+//Double转字符串

@@ -1,0 +1,125 @@
+/*Sprite是游戏中的精灵，可以把一张画着各种动作的图片按照一定长宽分割，并可以轻松显示需要的图片，非常方便。Sprite类是Layer（图层）类的子类。*/
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import javax.microedition.lcdui.game.*;
+//需要GameCanvas类和Sprite类
+
+public class Midlet extends MIDlet
+{
+    public void startApp()
+    {
+        MyCanvas.midlet=this;
+        Display.getDisplay(this).setCurrent(new MyCanvas());}
+    
+    public void pauseApp() {}
+    public void destroyApp(boolean unconditional) {}}
+
+//MyCanvas类
+public class MyCanvas extends GameCanvas implements Runnable
+{
+    public static MIDlet midlet;
+    int direction,old_direction;
+    //精灵方向
+    Sprite sprite;//精灵
+    int [][]seq={{6,7,6,8},{0,1,0,2},{3,4,5,4},{9,10,11,10}};//上下左右使用的图片编号
+    
+    public MyCanvas()
+    {
+        super(false);
+        direction=old_direction=1;
+        Image image=null;
+        try
+        {
+            image=Image.createImage("/npc.png");
+            }
+        catch(Exception e) {}
+        //创建精灵，请一定找一张宽能被6整除，高能被2整除的图片，否则出错！！！
+        sprite=new Sprite(image,image.getWidth()/6,image.getHeight()/2);
+        //设置播放的图片编号数组
+        sprite.setFrameSequence(seq[1]);
+        //设置精灵位置
+        sprite.setPosition(50,80);
+        //设置全屏
+        setFullScreenMode(true);
+        new Thread(this).start();}
+    
+    public void run()
+    {
+        //取得off-screen的Graphics对象
+        Graphics g=getGraphics();
+        long startTime,endTime;
+        //游戏运行速度设为100
+        int rate=100;
+        while(true)
+        {
+            startTime=System.currentTimeMillis();
+            input();
+            render(g);
+            flushGraphics();
+            endTime=System.currentTimeMillis();
+            if(endTime-startTime<rate)
+            {
+                try{
+                    Thread.sleep(rate-(endTime-startTime));
+                    }
+                catch(Exception e) {}
+                }
+            }
+        }
+    
+    //按键控制
+    public void input()
+    {
+        //取得按键状态
+        int state=getKeyStates();
+        if((state&UP_PRESSED)!=0)
+        {
+            //将sprite向上移10
+            sprite.move(0,-10);
+            direction=0;}
+        if((state&DOWN_PRESSED)!=0)
+        {
+            //将精灵下移10
+            sprite.move(0,10);
+            direction=1;}
+        if((state&LEFT_PRESSED)!=0)
+        {
+            //将精灵左移10
+            sprite.move(-10,0);
+            direction=2;}
+        if((state&RIGHT_PRESSED)!=0)
+        {
+            //将精灵右移10
+            sprite.move(10,0);
+            direction=3;}
+        if((state&FIRE_PRESSED)!=0)
+        midlet.notifyDestroyed();
+        
+        if(state!=0)
+        {
+            if(direction!=old_direction)
+            {
+                sprite.setFrameSequence(seq[direction]);
+                old_direction=direction;
+                }
+            else
+            {
+                //播放下一帧
+                sprite.nextFrame();
+                }
+            }        
+        }
+    
+    //画图方法
+    public void render(Graphics g)
+    {
+        g.setColor(30,40,50);
+        g.fillRect(0,0,getWidth(),getHeight());
+        //画精灵
+        sprite.paint(g);
+        }
+    }
+
+/*为了简便，本人没有将精灵限制在屏幕内移动。以下是Sprite类的其他方法。
+getX()取得横坐标，getY()取得纵坐标，isVisible()判断可见性，setVisible(boolean state)设置可见性。
+tengge QQ:930372551*/

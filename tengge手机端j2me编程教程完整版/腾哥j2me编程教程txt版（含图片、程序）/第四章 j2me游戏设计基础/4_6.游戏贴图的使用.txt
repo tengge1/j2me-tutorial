@@ -1,0 +1,101 @@
+/*TiledLayer可以将许多小图拼成一张大图，即贴图。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import javax.microedition.lcdui.game.*;
+
+public class Midlet extends MIDlet
+{
+    public void startApp()
+    {
+        MyCanvas.midlet=this;
+        Display.getDisplay(this).setCurrent(new MyCanvas());
+        }
+    
+    public void pauseApp() {}
+    public void destroyApp(boolean unconditional) {}}
+
+public class MyCanvas extends GameCanvas implements Runnable
+{
+    public static MIDlet midlet;
+    Image tree;
+    TiledLayer layer;//声明贴图实例
+
+    public MyCanvas()
+    {
+        super(false);
+        try
+        {
+            tree=Image.createImage("/tree.png");
+            }
+        catch(Exception e) {}
+        //生成贴图实例，3列4行，tree图片按横着长度的1/3分割，三个贴图编号是1,2,3
+        layer=new TiledLayer(3,4,tree,tree.getWidth()/3,tree.getHeight());
+        //新建排列数组tile[i][j]即为i行j列应放的图片编号
+        int [][]tile={{1,2,3},{1,3,2},{2,1,3},{3,2,1}};
+        //分别向贴图框架里放分割后的图片
+        for(int i=0;i<2;i++)
+        for(int j=0;j<3;j++)
+        layer.setCell(i,j,tile[i][j]);
+        setFullScreenMode(true);
+        new Thread(this).start();
+        }
+    
+    public void run()
+    {
+        Graphics g=getGraphics();
+        long startTime,endTime;
+        int rate=100;
+        while(true)
+        {
+            startTime=System.currentTimeMillis();
+            render(g);
+            endTime=System.currentTimeMillis();
+            if(endTime-startTime<rate)
+            {
+                try{
+                    Thread.sleep(rate-(endTime-startTime));
+                    }
+                catch(Exception e) {}
+                }
+            flushGraphics();
+            }
+        }        
+
+    public void render(Graphics g)
+    {
+        g.setColor(30,40,50);
+        g.fillRect(0,0,getWidth(),getHeight());
+        //将贴图画在画布上
+        layer.paint(g);
+        }
+    }
+
+/*TiledLayer常用方法：
+TiledLayer(int columns,int rows,Image image,int tileWidth,int tileHeight)
+//按columns行rows列新建一个框架，并把image按宽tileWidth高tileHeight分割。
+int createAnimatedTile(int staticIndex)
+//创建可变贴图
+int fillCells(int col,int row,int numCows,int numRows,int tileIndex)
+//在col行row列填充numCows行，numRows列编号为tileIndex的图片
+int getAnimatedTile(int AnimatedTileIndex)
+//返回制作AnimatedTile贴图的编号
+int getCell(int Col,int Row)
+//返回Col行Row列贴图编号
+int getCellWidth()
+//返回单元宽度
+int getCellHeight()
+//返回单元高度
+int getColumns()
+//返回总行数
+int getRows()
+//返回总列数
+void paint(Graphics g)
+//画贴图
+void setAnimatedTile(int AnimatedTillIndex,int TileIndex)
+//将AnimatedTile和Tile相关联
+void setCell(int Col,int Row,int tileIndex)
+//设置某个单元格贴图编号
+void setStaticTileSet(Image image,int tileWidth,int tileHeight)
+//重设贴图图片
+tengge QQ:930372551*/

@@ -1,0 +1,69 @@
+String类，字符串类！
+
+String s=new String("hello");
+//字符串转字符串类
+
+byte []b={'a','b','c','d','e'};
+String s=new String(b,"utf-8");
+//按utf-8解码后将b转换成字符串，读写文件重要！！！
+
+StringBuffer sb=new StringBuffer();
+String s=new String(sb);
+//字符串缓冲区转字符串！
+
+String s="hello,"+"world!";
+//连接两个字符串，重要！！！
+
+/*下面用这个字符串*/
+String s="cabbage";
+
+char c=s.charAt(2);
+//取第三个字符
+
+int i=s.compareTo("abc");
+//比较两个字符串
+
+boolean b=s.endsWith("ge");
+//判断是否已某字符串结束
+
+boolean b=s.startsWith("cab");
+//判断是否已某字符串开始
+
+boolean b=s.equals("geek");
+//判断两字符串是否相同
+
+boolean b=s.equalsIgnoreCase("geek");
+//判断两字符串是否相同(忽略大小写)
+
+byte []b=s.getBytes("utf-8");
+//按utf-8编码，存入数组中
+
+int pos=s.indexOf("ab",2);
+//在s中从第3个字符查找“ab”，返回位置，重要！！
+
+int pos=s.lastIndexOf("ab",2);
+//在s中从倒数第2个字符向前查找“ab”，返回位置，重要！！
+
+int l=s.length();
+//返回长度
+
+String s1=s.replace('a','b');
+//字符串中a替换成b，存s1中
+
+String s1=s.substring(2,5);
+//第3-6个字符组成的子字符串
+
+String s1=s.toLowerCase();
+//转换为小写
+
+String s1=s.toUpperCase();
+//转换为大写
+
+String s1=s.trim();
+//去掉字符串中空格
+
+String s1=String.valueOf(1.3);
+//各种数据类型转字符串！！！
+
+作者：tengge
+QQ：930372551

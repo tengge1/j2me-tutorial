@@ -1,0 +1,28 @@
+StringBuffer类，字符串缓冲类！
+
+StringBuffer sb=new StringBuffer();
+//新建缓冲区
+
+sb.append('a');
+//添加字符
+
+sb.append("Hello");
+//添加字符串
+
+sb.append(5.6);
+//添加浮点数
+
+sb.append(5);
+//添加整数
+
+sb.insert(3,'c');
+//第三个字符后插入字符
+
+StringBuffer sb1=sb.reverse();
+//倒过来
+
+String s=sb.toString();
+//转换为字符串
+
+tengge
+QQ:930372551

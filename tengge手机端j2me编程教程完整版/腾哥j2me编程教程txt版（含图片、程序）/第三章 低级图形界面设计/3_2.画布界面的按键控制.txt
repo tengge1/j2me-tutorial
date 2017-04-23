@@ -1,0 +1,106 @@
+/*这节我们学习按键控制。本例是一个查看键值的程序。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+
+public class Midlet extends MIDlet
+{
+    Display display;
+    Canvas canvas;
+    
+    public Midlet()
+    {
+        display=Display.getDisplay(this);
+        canvas=new KeyCanvas();
+        }
+    
+    public void startApp(){
+        display.setCurrent(canvas);
+        //设为全屏
+        canvas.setFullScreenMode(true);
+        }
+    
+    public void pauseApp(){}
+    
+    public void destroyApp(boolean unconditional){}
+}
+
+
+public class KeyCanvas extends Canvas
+{
+     int key1,key2;
+    String name;
+    
+    public KeyCanvas()
+    {
+        key1=0;
+        key2=0;
+        name="";
+        }
+    
+    protected void paint(Graphics g){
+        g.setColor(0,36,100);
+        
+        //getWidth()获取画布宽带，getHeight()获取屏幕高度，这一句常用来设置画布背景颜色
+        g.fillRect(0,0,getWidth(),getHeight());
+        //注意写字时一定要换颜色，否则字是看不出来的…
+        g.setColor(150,60,18);
+        g.drawString("按键显示键值，红键退出！",0,80,Graphics.LEFT|Graphics.BASELINE);
+        g.drawString("键值："+key1,0,110,Graphics.LEFT|Graphics.BASELINE);
+        g.drawString("游戏键值："+key2,0,140,Graphics.LEFT|Graphics.BASELINE);
+        g.drawString("键名："+name,0,170,Graphics.LEFT|Graphics.BASELINE);
+        }
+    
+    //键被按下时该方法被调用，key为按下键的键值
+    protected void keyPressed(int key)
+    {
+        key1=key;
+        
+        //将键值转换成游戏键值，游戏键值是适合做游戏的键值，例如上方向键和2游戏键值相同，其相反的转换方法为getKeyCode
+        key2=getGameAction(key);
+        
+        //获取键的名称
+        name=getKeyName(key);
+        repaint();
+        }
+    
+    //键被释放时该方法被调用，key为释放键的键值
+    protected void keyReleased(int key)
+    {
+        }
+    
+    //键被连续按下时该方法被调用，key为连续按下键的键值
+    protected void keyRepeated(int key)
+    {
+        }
+     
+    }
+
+/*没学的程序中都解释过了，这里就不讲了。大家不需要记住这些键值和游戏键值，其实是有有一些常量可以代替的。如下：
+KeyCode:   
+
+0键：Canvas.KEY_NUM0
+1键：Canvas.KEY_NUM1
+2键：Canvas.KEY_NUM2
+3键：Canvas.KEY_NUM3
+4键：Canvas.KEY_NUM4
+5键：Canvas.KEY_NUM5
+6键：Canvas.KEY_NUM6
+7键：Canvas.KEY_NUM7
+8键：Canvas.KEY_NUM8
+9键：Canvas.KEY_NUM9
+*键：Canvas.KEY_STAR
+#键：Canvas.KEY_POUND
+
+gameKeyCode:
+
+向上（2）：Canvas.UP
+向下（8）：Canvas.DOWN
+向左（4）：Canvas.LEFT
+向右（6）：Canvas.RIGHT
+Fire
+Game_A
+Game_B
+Game_C
+Game_D
+tengge QQ:930372551*/

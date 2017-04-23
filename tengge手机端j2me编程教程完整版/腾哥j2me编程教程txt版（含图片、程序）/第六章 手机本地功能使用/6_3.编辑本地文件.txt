@@ -1,0 +1,77 @@
+/*本程序新建e:/1.txt，并用utf-8编码向里面写入一些文字。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import java.io.DataOutputStream;
+import javax.microedition.io.file.FileConnection;
+import javax.microedition.io.Connector;
+
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Form form;
+    Display display;
+    Command send,exit;
+    
+    public Midlet()
+    {
+        form=new Form("编辑文件");
+        display=Display.getDisplay(this);
+        send=new Command("编辑",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        form.append("点击编辑自动以utf-8编码创建文件“e:/1.txt”，并写入“欢迎光临j2me世界！”");
+        form.addCommand(send);
+        form.addCommand(exit);
+        }
+    
+    public void startApp()
+    {
+        display.setCurrent(form);
+        form.setCommandListener(this);
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean arg0) {}
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==send) send();
+        else if(c==exit) notifyDestroyed();
+        }
+    
+    //有关编辑文件的东西全在这个方法里，请认真看！
+    public void send()
+    {
+        //用try避免因无法编辑文件引发异常导致程序错误
+        try
+        {
+            //首先打开一个连接，并强制转化为FileConnection类型，注意文件地址的写法是"file:///"+路径（注意有三道斜杠），第二个参数是打开方式
+            FileConnection connection=(FileConnection)Connector.open("file:///e:/1.txt",Connector.READ_WRITE,true);
+            //判断文件是否存在，不存在就创建文件，存在就删除后再创建文件
+            if(!connection.exists())
+            connection.create();
+            else
+            {
+                connection.delete();
+                connection.create();
+                }
+            //打开文件输出流，以供向文件内写数据
+            DataOutputStream os=connection.openDataOutputStream();
+            //getBytes可将字符串按指定编码转换为byte数组，此句也可写为os.writeUTF("欢迎光临j2me世界！")，j2me会把字符长度写到utf8编码的文字前，x-plore不认识，所以我采用另外一种写法
+            os.write("欢迎光临j2me世界！".getBytes("utf-8"));
+            os.close();
+            connection.close();
+            form.delete(0);
+            //显示在Form上
+            form.append("任务完成！");
+            }
+        catch(Exception e)
+        {
+            //这一句可以提示框的形式将错误显示出来，e.toString()可以将异常e转换为字符串
+            display.setCurrent(new Alert("错误",e.toString(),null,AlertType.ERROR));
+            }
+        }
+    }
+
+/*tengge QQ:930372551*/

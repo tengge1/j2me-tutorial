@@ -1,0 +1,8 @@
+Boolean.FALSE;//相当于false
+Boolean.TRUE;//相当于true
+Boolean b=new Boolean(true);//新建Boolean类
+boolean bv=b.booleanValue();//返回true
+b.equals(new Boolean(true));//返回true
+int code=b.hashCode();//返回哈希值
+String bs=b.toString();//转为字符串
+//QQ:930372551

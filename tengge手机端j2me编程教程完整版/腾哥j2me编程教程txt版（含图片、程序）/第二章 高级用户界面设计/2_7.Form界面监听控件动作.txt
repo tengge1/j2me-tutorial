@@ -1,0 +1,42 @@
+/*这节很简单，自己看，通过ItemStateListener接口监听文本控件状态，一旦改变，立即退出程序！*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+
+//调用ItemStateListener接口
+public class Midlet extends MIDlet implements ItemStateListener
+{
+    Display display;
+    Form form;
+    TextField textfield;
+    
+    protected void startApp()
+    {
+        textfield=new TextField("一旦修改","立即退出程序！",12,TextField.ANY);
+        
+                
+        form=new Form("表单");
+        form.append(textfield);
+        display=Display.getDisplay(this);
+        display.setCurrent(form);
+        //设置监听字符串控件
+        form.setItemStateListener(this);
+            }
+    
+    //要实现ItemStateListener接口，必须重写该方法
+    public void itemStateChanged(Item item)
+    {
+        if(item==textfield)
+        {
+            destroyApp(true);
+            notifyDestroyed();
+            }
+        }
+    
+    protected void pauseApp(){}
+    protected void destroyApp(boolean arg0){}
+}
+
+/*新东西在程序中都解释了，这里就不解释了。
+tengge QQ:930372551
+*/

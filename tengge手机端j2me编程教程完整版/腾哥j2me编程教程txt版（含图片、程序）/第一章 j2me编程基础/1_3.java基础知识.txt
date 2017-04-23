@@ -1,0 +1,82 @@
+我们简单介绍一些java和j2me的基础知识。希望您能有java或C语言的知识，否则很难看懂，不过其实这节不看也没关系，大体上看看有个印象即可。
+一、数据类型：char,int,long,float,double,String,int[],class,boolean等。
+1.java中整型int占四个字节。
+示例：int a=5;
+2.boolean类型仅有两个取值true，false。
+3.基本类型和[]可组成数组。
+示例：int []b={1,2,3};
+也可以写成int b[]={1,2,3};
+使用的时候b[2]
+二、语句要求：
+1.与c语言一样，每条语句必须以“;”结束。
+2.不需要缩进，层次关系完全以{}确定。
+三、条件语句：
+提供if，switch，break，continue等语句，与c语言相同。
+示例：if(a==8) {b=6;}
+switch(a){
+    case 1:break;
+    default:break;}
+
+四、循环语句：
+提供while和for循环语句，与c语言相同。
+
+五、异常处理：
+格式如下：
+try{
+    可能产生异常的语句;}
+catch(Exception e){
+    异常处理的语句;}
+
+六、注释
+1.以“//”开始，到换行符结束为注释，被编译器忽略。
+2.以“/*”开始，到“*/”结束是注释。
+
+七、类的使用
+import java.io.*;
+public class sayHello{
+    String s="Hello";
+    void main(int argc,char[]argv)
+    {System.out.println(s);
+        }
+    }
+//注意：这是个电脑程序，手机上无法运行…
+//import加载模块包中的类，*表示所有类，class声明类sayHello，public是访问控制符。s是变量，在类中称属性，main函数，在类中称方法。
+
+八、控制符
+访问控制：public，private，protected等
+其他：static，virtue，final等
+
+九、另一种抛出异常的方法
+方法名后加throws Exception，注意多了个s。
+
+十、继承父类方法
+定义类时类名后加extends父类名。
+
+十一、使用接口方法
+定义时：public interface{}
+声明时：定义类时类名后加implements接口名
+
+十二、this和super指代
+this表示本类，super表示父类。
+
+十三、类使用的两种方法
+1.被子类继承
+2.生成实例。
+假如有个Command类，生成实例的格式如下：
+Command com1=new Command(初始化实例参数);
+
+十四、构造函数
+无返回值类型与类名相同的方法，会自动运行
+
+示例：
+//类sayHello继承Hello类并调用Runnable接口
+public class sayHello extends Hello implements Runnable
+{
+    public sayHello(){}
+    //前面那个是构造函数
+    
+    public void run(){}
+    //Runnable接口实现的函数
+} 
+
+//tengge QQ:930372551

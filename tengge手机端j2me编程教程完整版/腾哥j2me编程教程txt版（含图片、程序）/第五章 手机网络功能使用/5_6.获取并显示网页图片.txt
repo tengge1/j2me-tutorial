@@ -1,0 +1,67 @@
+/*本程序获取百度首页图片并显示在Form上。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import java.io.InputStream;
+import javax.microedition.io.*;
+//使用Connector类和HttpConnection类
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Form form;
+    Display display;
+    Command send,exit;
+    
+    public Midlet()
+    {
+        form=new Form("获取图片");
+        display=Display.getDisplay(this);
+        send=new Command("获取",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        form.append("按左键获取百度首页图片！");
+        form.addCommand(send);
+        form.addCommand(exit);
+        }
+    
+    public void startApp()
+    {
+        display.setCurrent(form);
+        form.setCommandListener(this);
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean arg0) {}
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==send) send();
+        else if(c==exit) notifyDestroyed();
+        }
+    
+    //有关联网取得图片的东西全在这个方法里，请认真看！
+    public void send()
+    {
+        try
+        {
+            HttpConnection connection=(HttpConnection)Connector.open("http://m.baidu.com/static/l.gif");
+            //获得InputStream对象
+            InputStream is=connection.openInputStream();
+            //使用InputStream对象可直接创建突破对象
+            Image image=Image.createImage(is);
+            //关闭数据流和网络连接
+            is.close();
+            connection.close();
+            //创建图片控件
+            ImageItem imageitem=new ImageItem("百度首页",image,ImageItem.LAYOUT_CENTER,"百度图片");
+            form.delete(0);
+            //将图片控件显示在Form上
+            form.append(imageitem);
+            }
+        catch(Exception e)
+        {
+            }
+        }
+    }
+
+/*tengge QQ:930372551*/

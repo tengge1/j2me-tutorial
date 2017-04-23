@@ -1,0 +1,45 @@
+/*getClass().getResourceAsStream(文件路径)可以读取压缩包内各种资源文件，返回InputStream对象。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import java.io.InputStream;
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    TextBox text=new TextBox("读取文件","",500,TextField.ANY);
+    Command read=new Command("读取",Command.OK,2);
+    Command exit=new Command("退出",Command.EXIT,2);
+    
+    public void startApp()
+    {
+        text.addCommand(read);
+        text.addCommand(exit);
+        Display.getDisplay(this).setCurrent(text);
+        text.setCommandListener(this);
+        }
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==read)
+        {
+            try
+            {
+                //读取压缩包内资源
+                InputStream is=getClass().getResourceAsStream("/text.txt");
+                byte []bytes=new byte[is.available()];
+                is.read(bytes);
+                is.close();
+                //进行编码转换并显示
+                text.setString(new String(bytes,"utf-8"));
+                }
+            catch(Exception e)
+            {
+                Display.getDisplay(this).setCurrent(new Alert("错误",e.toString(),null,AlertType.ERROR));
+                }
+            }
+        if(c==exit) notifyDestroyed();
+        }
+    
+    public void pauseApp() {}
+    public void destroyApp(boolean unconditional) {}}
+/*tengge QQ:930372551*/

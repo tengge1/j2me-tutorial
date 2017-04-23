@@ -1,0 +1,67 @@
+//Timer类是定时器类，TimerTask类是定时任务类，通过它们可以定时执行一定任务。
+
+import java.util.Timer;
+import java.util.TimerTask;
+import javax.microedition.midlet.*;
+import javax.microedition.lcdui.*;
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Display display;
+    Form form;
+    Command stop,exit;
+    Timer timer;
+    TimerTask task;
+    
+    public Midlet()
+    {
+        display=Display.getDisplay(this);
+        form=new Form("计时器");
+        stop=new Command("停止",Command.STOP,1);
+        exit=new Command("退出",Command.EXIT,1);
+        form.addCommand(stop);
+        form.addCommand(exit);
+        form.setCommandListener(this);
+        //新建定时任务
+        task=new MyTask(form);
+        //新建定时器
+        timer=new Timer();
+        }
+    
+    protected void startApp()
+    {
+        //通过schedule方法开始定时任务运行，5秒后开始运行
+        timer.schedule(task,5000);
+        display.setCurrent(form);
+        }
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        //cancel方法取消定时器
+        if(c==stop) timer.cancel();
+        if(c==exit) notifyDestroyed();
+        }
+    
+    protected void pauseApp(){}
+    
+    protected void destroyApp(boolean unconditional){}
+    }
+
+//你的任务必须是TimerTask类的子类，并必须重载run方法
+public class MyTask extends TimerTask
+{
+    Form form;
+    public MyTask(Form form)
+    {
+        super();
+        this.form=form;
+        }
+    
+    public void run()
+    {
+        form.append("任务正在运行！\n");
+        }
+    }
+
+//作者：tengge
+//QQ:930372551

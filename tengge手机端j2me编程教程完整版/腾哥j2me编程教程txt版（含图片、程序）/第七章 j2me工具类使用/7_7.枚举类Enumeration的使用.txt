@@ -1,0 +1,37 @@
+Enumeration是枚举类。学习它并不是让大家创建它的实例使用，而是很多其他类返回值是Enumeration实例。下面简单说明它的用法：
+
+import javax.microedition.io.Connector;
+import javax.microedition.io.file.FileConnection;
+import javax.microedition.io.file.FileSystemRegistry;
+import java.util.Enumeration;
+
+//演示一下获取根目录
+Enumeration enum=FileSystemRegistry.listRoots();
+String string[]=new String[5];
+int num=0;
+while(enum.hasMoreElements())
+{
+    string[num]=(String)enum.nextElement();
+    num+=1;
+    }
+
+/*
+这里解释一下，FileSystemRegistry.listRoots()返回枚举类的一个实例enum，我们通过enum.hasMoreElements()判断是否还有更多元素，然后用enum.nextElement()获取下一个元素，它是Object类型，我们强制转换为字符串，并放到字符串数组中，最后num是字符串总数。
+*/
+
+//获取某一文件夹下的文件和文件夹列表同样如此操作（下面操作仅智能机适用，非智能请改为“file:///手机存储/”）：
+
+FileConnection fc=(FileConnection)Connector.open("file:///e:/");
+Enumeration enum=fc.list();
+fc.close();
+String string[]=new String[30];
+int num=0;
+while(enum.hasMoreElements())
+{
+    string[num]=(String)enum.nextElement();
+    num+=1;
+    }
+
+最后数组中前num个是e:/文件夹下的文件和文件夹列表。
+
+作者：tengge QQ:930372551

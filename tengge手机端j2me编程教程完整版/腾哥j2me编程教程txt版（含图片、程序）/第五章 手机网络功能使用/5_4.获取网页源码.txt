@@ -1,0 +1,75 @@
+/*本程序使用HttpConnection获取百度首页源码。获得的网页文字编码是utf-8，需要转换为unicode才能正常显示。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import java.io.DataInputStream;
+import javax.microedition.io.*;
+//上面包中提供Connector类、HttpConnection类。
+
+public class Midlet extends MIDlet implements CommandListener
+{
+    Form form;
+    Display display;
+    Command send,exit;
+    
+    public Midlet()
+    {
+        form=new Form("获取源码");
+        display=Display.getDisplay(this);
+        send=new Command("获取",Command.OK,2);
+        exit=new Command("退出",Command.EXIT,2);
+        form.append("按左键获取百度首页源码！");
+        form.addCommand(send);
+        form.addCommand(exit);
+        }
+    
+    public void startApp()
+    {
+        display.setCurrent(form);
+        form.setCommandListener(this);
+        }
+    
+    public void pauseApp() {}
+    
+    public void destroyApp(boolean arg0) {}
+    
+    public void commandAction(Command c,Displayable d)
+    {
+        if(c==send) send();
+        else if(c==exit) notifyDestroyed();
+        }
+    
+    //有关联网取得网页源码的东西全在这个方法里，请认真看！
+    public void send()
+    {
+        //用try避免因无法取得网页引发异常导致程序错误
+        try
+        {
+            //首先打开一个网络连接，并强制转化为HttpConnection类型
+            HttpConnection connection=(HttpConnection)Connector.open("http://wap.baidu.com");
+            //获取数据长度
+            int length=(int)connection.getLength();
+            //从获得的连接对象中打开一个数据流以供读取
+            DataInputStream is=connection.openDataInputStream();
+            //新建一个byte数组供存放数据
+            byte[] bytes=new byte[length];
+            //将流中所有数据读取到数组中
+            is.readFully(bytes);
+            //关闭数据流，释放资源
+            is.close();
+            //关闭连接
+            connection.close();
+            //将bytes数组以utf-8编码译码并保存在字符串s中
+            String s=new String(bytes,"utf-8");
+            //删除第一项
+            form.delete(0);
+            form.append(s);
+            is.close();
+            }
+        catch(Exception e)
+        {
+            }
+        }
+    }
+
+/*tengge QQ:930372551*/

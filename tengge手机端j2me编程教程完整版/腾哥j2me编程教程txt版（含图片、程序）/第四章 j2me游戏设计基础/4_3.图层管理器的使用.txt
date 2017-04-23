@@ -1,0 +1,131 @@
+/*LayerManage类是专门管理图层（例如精灵Sprite，贴图TiledLayer）的，可以方便图层的插入、删除，具有设置视口等功能，看不到的位置不会画。*/
+
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.lcdui.*;
+import javax.microedition.lcdui.game.*;
+//GameCanvas类，LayerManager类，Sprite类
+
+public class Midlet extends MIDlet
+{
+    public void startApp()
+    {
+        MyCanvas.midlet=this;
+        Display.getDisplay(this).setCurrent(new MyCanvas());
+        }
+    
+    public void pauseApp() {}
+    public void destroyApp(boolean unconditional) {}}
+
+//MyCanvas类
+public class MyCanvas extends GameCanvas implements Runnable
+{
+    public static MIDlet midlet;
+    int direction,old_direction;
+    Image image,image2;
+    Sprite sprite,sprite2;
+    //声明图层管理器
+    LayerManager manager;
+    int [][]seq={{6,7,6,8},{0,1,0,2},{3,4,5,4},{9,10,11,10}};
+    
+    public MyCanvas()
+    {
+        super(false);
+        direction=old_direction=1;
+        try
+        {
+            image=Image.createImage("/npc.png");
+            image2=Image.createImage("/npc2.png");
+            }
+        catch(Exception e) {}
+        sprite=new Sprite(image,image.getWidth()/6,image.getHeight()/2);
+        sprite.setFrameSequence(seq[1]);
+        sprite.setPosition(50,80);
+        sprite2=new Sprite(image2,image2.getWidth()/3,image2.getHeight());
+        sprite2.setPosition(100,40);
+        //图层管理器实例
+        manager=new LayerManager();
+        //向图层管理器中添加图层
+        manager.append(sprite);
+        manager.append(sprite2);
+        setFullScreenMode(true);
+        new Thread(this).start();
+        }
+    
+    public void run()
+    {
+        Graphics g=getGraphics();
+        long startTime,endTime;
+        int rate=100;
+        while(true)
+        {
+            startTime=System.currentTimeMillis();
+            input();
+            render(g);
+            endTime=System.currentTimeMillis();
+            if(endTime-startTime<rate)
+            {
+                try{
+                    Thread.sleep(rate-(endTime-startTime));
+                    }
+                catch(Exception e) {}
+                }
+            flushGraphics();
+            }
+        }
+    
+    public void input()
+    {
+        int state=getKeyStates();
+        if((state&UP_PRESSED)!=0)
+        {
+            sprite.move(0,-10);
+            direction=0;}
+        if((state&DOWN_PRESSED)!=0)
+        {
+            sprite.move(0,10);
+            direction=1;}
+        if((state&LEFT_PRESSED)!=0)
+        {
+            sprite.move(-10,0);
+            direction=2;}
+        if((state&RIGHT_PRESSED)!=0)
+        {
+            sprite.move(10,0);
+            direction=3;}
+        if((state&FIRE_PRESSED)!=0)
+        midlet.notifyDestroyed();
+        
+        if(state!=0)
+        {
+            if(direction!=old_direction)
+            {
+                sprite.setFrameSequence(seq[direction]);
+                old_direction=direction;
+                }
+            else
+            {
+                sprite.nextFrame();
+                }
+            }
+        sprite2.nextFrame();    
+        }
+    
+    public void render(Graphics g)
+    {
+        g.setColor(30,40,50);
+        g.fillRect(0,0,getWidth(),getHeight());
+        //将manager所有图层按顺序画在屏幕上，越先添加的后画，(10,10)是视口相对于屏幕左上角的位置
+        manager.paint(g,10,10);
+        }
+    }
+
+/*LawyerManager常用方法：
+append(Lawyer l)向图层队列末尾添加图层
+Lawyer getLawyerAt(int index)获取在index位置的图层，从0开始编号
+int getSize()获取总图层数
+void insert(Lawyer l,int index)将某个图层插入到某个位置
+void paint(Graphics g,int x,int y)画出LawyerManager中所有图层，先画位置靠后的
+void remove(Lawyer l)将某个图层移除
+void setViewWindow(int x,int y,int width,int height)根据位置、宽度、高度设置视口（游戏背景一般会超过屏幕的宽度、高度，我们可以设定显示在屏幕位置的部分）
+
+tengge QQ:930372551*/

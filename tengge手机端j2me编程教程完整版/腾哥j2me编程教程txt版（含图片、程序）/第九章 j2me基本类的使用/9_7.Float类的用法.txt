@@ -1,0 +1,26 @@
+Float类是浮点数类，最重要的是掌握它与字符串类的转换。
+
+Float f=new Float(5.3);
+//float转为Float实例
+
+float f1=f.floatValue();
+//Float实例转float
+
+int i=f.intValue();
+//Float实例转int
+
+float f2=Float.parseFloat("5.3");
+//字符串转float
+
+Float f3=Float.valueOf("5.3");
+//字符串转Float实例
+
+Float f=new Float(5.3);
+String s=f.toString();
+//浮点数转字符串
+
+String s=Float.toString(5.3);
+//浮点数转字符串
+
+//tengge
+//QQ:930372551

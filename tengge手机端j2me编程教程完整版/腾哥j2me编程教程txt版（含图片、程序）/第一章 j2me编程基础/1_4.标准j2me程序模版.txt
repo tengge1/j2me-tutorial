@@ -1,0 +1,22 @@
+//这是一个标准j2me程序的模版，以后写程序可直接在此基础上修改
+
+//加载midlet包中的MIDlet类
+import javax.microedition.midlet.MIDlet;
+
+//j2me程序必须从继承MID类的类开始执行
+public class Midlet extends MIDlet{
+
+    //开始运行首先调用的方法
+    public void startApp(){
+        }
+    
+    //暂停调用的方法
+    public void pauseApp(){}
+    
+    //停止运行退出程序调用的方法
+    public void destroyApp(boolean unconditional){}
+}
+
+//该模块打包为jar安装后打开只有一个程序名称标题，主窗口与主题同颜色
+
+//tengge QQ:930372551
